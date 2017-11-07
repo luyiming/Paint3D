@@ -8,6 +8,8 @@ Rectangle {
     width: 264
     color: "#f0f2f3"
 
+    property ParallelAnimation titleAnimation: titleAnimation
+
     ParallelAnimation {
         id: titleAnimation
         NumberAnimation {
@@ -27,8 +29,6 @@ Rectangle {
             to: 1
         }
     }
-
-
 
     Text {
         id: bigTitle
@@ -53,51 +53,36 @@ Rectangle {
         spacing: 5
         columns: 5
 
-        ImageButton {
-            width: 40
-            height: 40
+        property variant brushIconName: ["marker", "pixel", "pen", "crayon", "eraser", "fill", "oil-brush", "pencil", "spray-can", "watercolor"]
+        property variant brushTitleName: ["marker", "pixel", "pen", "crayon", "eraser", "fill", "oil-brush", "pencil", "spray-can", "watercolor"]
 
-            exclusiveGroup: shapeGroup
+        Repeater {
+            model: 10
 
-            source: 'qrc:/icon/brush-pixel-off.png'
+            ImageButton {
+                width: 40
+                height: 40
 
-            on_img: 'qrc:/icon/brush-pixel-on.png'
-            on_hover_img: 'qrc:/icon/brush-pixel-on.png'
-            on_pressed_img: 'qrc:/icon/brush-pixel-on.png'
-            off_img: 'qrc:/icon/brush-pixel-off.png'
-            off_hover_img: 'qrc:/icon/brush-pixel-hover.png'
-            off_pressed_img: 'qrc:/icon/brush-pixel-hover.png'
+                exclusiveGroup: shapeGroup
 
-            onCheckedChanged: {
-                if (checked && bigTitle.text != '像素笔') {
-                    bigTitle.text = '像素笔'
-                    titleAnimation.start()
+                source: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '.png'
+
+                on_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
+                on_hover_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
+                on_pressed_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
+                off_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '.png'
+                off_hover_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-hover.png'
+                off_pressed_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-hover.png'
+
+                onCheckedChanged: {
+                    if (checked && bigTitle.text !== brushes.brushTitleName[index]) {
+                        bigTitle.text = brushes.brushTitleName[index]
+                        titleAnimation.start()
+                    }
                 }
             }
         }
 
-        ImageButton {
-            width: 40
-            height: 40
-
-            exclusiveGroup: shapeGroup
-
-            source: 'qrc:/icon/brush-eraser-off.png'
-
-            on_img: 'qrc:/icon/brush-eraser-on.png'
-            on_hover_img: 'qrc:/icon/brush-eraser-on.png'
-            on_pressed_img: 'qrc:/icon/brush-eraser-on.png'
-            off_img: 'qrc:/icon/brush-eraser-off.png'
-            off_hover_img: 'qrc:/icon/brush-eraser-hover.png'
-            off_pressed_img: 'qrc:/icon/brush-eraser-hover.png'
-
-            onCheckedChanged: {
-                if (checked && bigTitle.text != '橡皮擦') {
-                    bigTitle.text = '橡皮擦'
-                    titleAnimation.start()
-                }
-            }
-        }
     }
 
 

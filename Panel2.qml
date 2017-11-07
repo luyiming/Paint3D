@@ -7,6 +7,8 @@ Rectangle {
     width: 264
     color: "#f0f2f3"
 
+    property ParallelAnimation titleAnimation: titleAnimation
+
     ParallelAnimation {
         id: titleAnimation
         NumberAnimation {
@@ -26,7 +28,6 @@ Rectangle {
             to: 1
         }
     }
-
 
 
     Text {
@@ -62,25 +63,29 @@ Rectangle {
         anchors.top: title1.bottom
         anchors.topMargin: 12
 
-        ImageButton {
-            width: 40
-            height: 40
+        Repeater {
+            model: ["line", "curve2", "curve3", "curve4"]
 
-            exclusiveGroup: shapeGroup
+            ImageButton {
+                width: 40
+                height: 40
 
-            source: 'qrc:/icon/2dshape-line.png'
+                exclusiveGroup: shapeGroup
 
-            on_img: 'qrc:/icon/2dshape-line-on.png'
-            on_hover_img: 'qrc:/icon/2dshape-line-on.png'
-            on_pressed_img: 'qrc:/icon/2dshape-line-on.png'
-            off_img: 'qrc:/icon/2dshape-line.png'
-            off_hover_img: 'qrc:/icon/2dshape-line-on.png'
-            off_pressed_img: 'qrc:/icon/2dshape-line-pressed.png'
+                source: 'qrc:/icon/2dshape/' + modelData + '.png'
 
-            onCheckedChanged: {
-                if (checked && bigTitle.text != '直线和曲线') {
-                    bigTitle.text = '直线和曲线'
-                    titleAnimation.start()
+                on_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                on_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                on_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                off_img: 'qrc:/icon/2dshape/' + modelData + '.png'
+                off_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                off_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-pressed.png'
+
+                onCheckedChanged: {
+                    if (checked && bigTitle.text != '直线和曲线') {
+                        bigTitle.text = '直线和曲线'
+                        titleAnimation.start()
+                    }
                 }
             }
         }
@@ -107,71 +112,31 @@ Rectangle {
         columns: 5
         spacing: 5
 
-        ImageButton {
-            width: 40
-            height: 40
+        Repeater {
+            model: ["circle", "capsule", "square", "rounded-square", "triangle",
+                    "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
+                    "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
 
-            exclusiveGroup: shapeGroup
+            ImageButton {
+                width: 40
+                height: 40
 
-            source: 'qrc:/icon/2dshape-circle.png'
+                exclusiveGroup: shapeGroup
 
-            on_img: 'qrc:/icon/2dshape-circle-on.png'
-            on_hover_img: 'qrc:/icon/2dshape-circle-on.png'
-            on_pressed_img: 'qrc:/icon/2dshape-circle-on.png'
-            off_img: 'qrc:/icon/2dshape-circle.png'
-            off_hover_img: 'qrc:/icon/2dshape-circle-on.png'
-            off_pressed_img: 'qrc:/icon/2dshape-circle-pressed.png'
+                source: 'qrc:/icon/2dshape/' + modelData + '.png'
 
-            onCheckedChanged: {
-                if (checked && bigTitle.text != '2D 形状') {
-                    bigTitle.text = '2D 形状'
-                    titleAnimation.start()
-                }
-            }
-        }
+                on_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                on_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                on_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                off_img: 'qrc:/icon/2dshape/' + modelData + '.png'
+                off_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
+                off_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-pressed.png'
 
-        ImageButton {
-            width: 40
-            height: 40
-
-            exclusiveGroup: shapeGroup
-
-            source: 'qrc:/icon/2dshape-capsule.png'
-
-            on_img: 'qrc:/icon/2dshape-capsule-on.png'
-            on_hover_img: 'qrc:/icon/2dshape-capsule-on.png'
-            on_pressed_img: 'qrc:/icon/2dshape-capsule-on.png'
-            off_img: 'qrc:/icon/2dshape-capsule.png'
-            off_hover_img: 'qrc:/icon/2dshape-capsule-on.png'
-            off_pressed_img: 'qrc:/icon/2dshape-capsule-pressed.png'
-
-            onCheckedChanged: {
-                if (checked && bigTitle.text != '2D 形状') {
-                    bigTitle.text = '2D 形状'
-                    titleAnimation.start()
-                }
-            }
-        }
-
-        ImageButton {
-            width: 40
-            height: 40
-
-            exclusiveGroup: shapeGroup
-
-            source: 'qrc:/icon/2dshape-square.png'
-
-            on_img: 'qrc:/icon/2dshape-square-on.png'
-            on_hover_img: 'qrc:/icon/2dshape-square-on.png'
-            on_pressed_img: 'qrc:/icon/2dshape-square-on.png'
-            off_img: 'qrc:/icon/2dshape-square.png'
-            off_hover_img: 'qrc:/icon/2dshape-square-on.png'
-            off_pressed_img: 'qrc:/icon/2dshape-square-pressed.png'
-
-            onCheckedChanged: {
-                if (checked && bigTitle.text != '2D 形状') {
-                    bigTitle.text = '2D 形状'
-                    titleAnimation.start()
+                onCheckedChanged: {
+                    if (checked && bigTitle.text != '2D 形状') {
+                        bigTitle.text = '2D 形状'
+                        titleAnimation.start()
+                    }
                 }
             }
         }
@@ -212,8 +177,6 @@ Rectangle {
             }
         }
     }
-
-
 
     Slider {
         id: thickness

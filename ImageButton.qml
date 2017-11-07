@@ -22,8 +22,6 @@ Image {
 
     signal clicked
 
-    width: 68; height: 48
-
     source: null
 
     onCheckedChanged: {

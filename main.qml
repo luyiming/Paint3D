@@ -27,6 +27,12 @@ Window {
         anchors.bottom: root.bottom
         anchors.right: root.right
         anchors.left: board.right
+
+        onVisibleChanged: {
+            if (visible) {
+                titleAnimation.start()
+            }
+        }
     }
 
     Panel2 {
@@ -38,6 +44,12 @@ Window {
         anchors.bottom: root.bottom
         anchors.right: root.right
         anchors.left: board.right
+
+        onVisibleChanged: {
+            if (visible) {
+                titleAnimation.start()
+            }
+        }
     }
 
     Rectangle {
