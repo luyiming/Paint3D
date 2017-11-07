@@ -59,7 +59,7 @@ Rectangle {
         Repeater {
             model: 10
 
-            ImageButton {
+            CheckableButton {
                 width: 40
                 height: 40
 

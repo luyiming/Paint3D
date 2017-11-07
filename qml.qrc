@@ -6,5 +6,6 @@
         <file>Panel2.qml</file>
         <file>Panel1.qml</file>
         <file>FullScreenMenu.qml</file>
+        <file>CheckableButton.qml</file>
     </qresource>
 </RCC>

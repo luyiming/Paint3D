@@ -66,7 +66,7 @@ Rectangle {
         Repeater {
             model: ["line", "curve2", "curve3", "curve4"]
 
-            ImageButton {
+            CheckableButton {
                 width: 40
                 height: 40
 
@@ -117,7 +117,7 @@ Rectangle {
                     "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
                     "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
 
-            ImageButton {
+            CheckableButton {
                 width: 40
                 height: 40
 

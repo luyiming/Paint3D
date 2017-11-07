@@ -16,7 +16,7 @@ Rectangle {
             Column {
                 Repeater {
                     model: ['new', 'open', 'save']
-                    ImageButton {
+                    CheckableButton {
                         source: 'qrc:/icon/menu/' + modelData + '.png'
 
                         on_img: 'qrc:/icon/menu/' + modelData + '.png'

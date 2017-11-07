@@ -98,7 +98,6 @@ Window {
 
     }
 
-
     FullScreenMenu {
         id: menu
         color: "white"
@@ -114,5 +113,4 @@ Window {
         }
         onReturnClicked: menu.x = -root.width
     }
-
 }

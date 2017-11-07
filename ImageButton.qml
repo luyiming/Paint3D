@@ -3,41 +3,13 @@ import QtQuick.Controls 1.4
 
 Image {
     id: root
-
-    property url off_img: null
-    property url off_hover_img: null
-    property url off_pressed_img: null
-    property url on_img: null
-    property url on_hover_img: null
-    property url on_pressed_img: null
-
-    property bool checked: false
-
-    property ExclusiveGroup exclusiveGroup: null
-
-    onExclusiveGroupChanged: {
-        if (exclusiveGroup)
-            exclusiveGroup.bindCheckable(root)
-    }
+    property url img: null
+    property url hover_img: null
+    property url pressed_img: null
 
     signal clicked
 
     source: null
-
-    onCheckedChanged: {
-        if(mouseArea.containsMouse) {
-            if (root.checked)
-                root.source = on_hover_img
-            else
-                root.source = off_hover_img
-        }
-        else {
-            if (root.checked)
-                root.source = on_img
-            else
-                root.source = off_img
-        }
-    }
 
     MouseArea {
         id: mouseArea
@@ -49,30 +21,19 @@ Image {
         }
 
         onPressed: {
-            if (root.checked)
-                root.source = on_pressed_img
-            else
-                root.source = off_pressed_img
+            root.source = pressed_img
         }
 
         onReleased: {
-            root.checked = true
-            root.source = on_hover_img
+            if (containsMouse)
+                root.source = hover_img
+            else
+                root.source = img
         }
 
-        onContainsMouseChanged: {
-            if(containsMouse) {
-                if (root.checked)
-                    root.source = on_hover_img
-                else
-                    root.source = off_hover_img
-            }
-            else {
-                if (root.checked)
-                    root.source = on_img
-                else
-                    root.source = off_img
-            }
-        }
+        onEntered: root.source = hover_img
+
+        onExited: root.source = img
+
     }
 }

@@ -17,12 +17,9 @@ Rectangle {
         anchors.left: parent.left
         source: 'qrc:/icon/header/menu.png'
 
-        on_img: 'qrc:/icon/header/menu.png'
-        on_hover_img: 'qrc:/icon/header/menu-hover.png'
-        on_pressed_img: 'qrc:/icon/header/menu-pressed.png'
-        off_img: 'qrc:/icon/header/menu.png'
-        off_hover_img: 'qrc:/icon/header/menu-hover.png'
-        off_pressed_img: 'qrc:/icon/header/menu-pressed.png'
+        img: 'qrc:/icon/header/menu.png'
+        hover_img: 'qrc:/icon/header/menu-hover.png'
+        pressed_img: 'qrc:/icon/header/menu-pressed.png'
 
         onClicked: header.menuClicked()
     }
@@ -39,7 +36,7 @@ Rectangle {
         Repeater {
             model: 6
 
-            ImageButton {
+            CheckableButton {
                 width: 68
                 height: header.height
                 exclusiveGroup: headerGroup
@@ -75,12 +72,9 @@ Rectangle {
 
                 source: 'qrc:/icon/header/' + modelData + '.png'
 
-                on_img: 'qrc:/icon/header/' + modelData + '.png'
-                on_hover_img: 'qrc:/icon/header/' + modelData + '-hover.png'
-                on_pressed_img: 'qrc:/icon/header/' + modelData + '-pressed.png'
-                off_img: 'qrc:/icon/header/' + modelData + '.png'
-                off_hover_img: 'qrc:/icon/header/' + modelData + '-hover.png'
-                off_pressed_img: 'qrc:/icon/header/' + modelData + '-pressed.png'
+                img: 'qrc:/icon/header/' + modelData + '.png'
+                hover_img: 'qrc:/icon/header/' + modelData + '-hover.png'
+                pressed_img: 'qrc:/icon/header/' + modelData + '-pressed.png'
             }
         }
     }
