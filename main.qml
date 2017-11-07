@@ -16,6 +16,10 @@ Window {
         id: header
         anchors.top: root.top
         width: root.width
+
+        onMenuClicked: {
+            menu.x = 0
+        }
     }
 
     Panel1 {
@@ -93,4 +97,22 @@ Window {
         }
 
     }
+
+
+    FullScreenMenu {
+        id: menu
+        color: "white"
+        width: root.width
+        height: root.height
+        x: -root.width
+        y: 0
+        Behavior on x {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+        onReturnClicked: menu.x = -root.width
+    }
+
 }

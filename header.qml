@@ -8,6 +8,8 @@ Rectangle {
 
     property int currntHeader: 1
 
+    signal menuClicked
+
     ImageButton {
         id: menu_button
         width: 68
@@ -21,6 +23,8 @@ Rectangle {
         off_img: 'qrc:/icon/header/menu.png'
         off_hover_img: 'qrc:/icon/header/menu-hover.png'
         off_pressed_img: 'qrc:/icon/header/menu-pressed.png'
+
+        onClicked: header.menuClicked()
     }
 
     Row {

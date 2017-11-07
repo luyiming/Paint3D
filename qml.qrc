@@ -5,5 +5,6 @@
         <file>Header.qml</file>
         <file>Panel2.qml</file>
         <file>Panel1.qml</file>
+        <file>FullScreenMenu.qml</file>
     </qresource>
 </RCC>

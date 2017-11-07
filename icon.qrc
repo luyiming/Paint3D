@@ -140,5 +140,15 @@
         <file>icon/text/text-hover.png</file>
         <file>icon/text/text-on.png</file>
         <file>icon/brush/marker.png</file>
+        <file>icon/menu/new.png</file>
+        <file>icon/menu/new-hover.png</file>
+        <file>icon/menu/new-pressed.png</file>
+        <file>icon/menu/open.png</file>
+        <file>icon/menu/open-hover.png</file>
+        <file>icon/menu/open-on.png</file>
+        <file>icon/menu/open-pressed.png</file>
+        <file>icon/menu/save.png</file>
+        <file>icon/menu/save-hover.png</file>
+        <file>icon/menu/save-pressed.png</file>
     </qresource>
 </RCC>
