@@ -6,36 +6,35 @@
 #include <QBrush>
 #include <QObject>
 #include <QDebug>
+#include <QMouseEvent>
 
 class DrawingBoard : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(int x1 READ getX WRITE setX NOTIFY sourceChanged)
-    Q_PROPERTY(int y1 READ getY WRITE setY NOTIFY sourceChanged)
 
 public:
     DrawingBoard(QQuickItem *parent = 0);
-
-    int getX() const {return x;}
-    void setX(int x) {this->x=x; qDebug()<<"setX: "<<x;}
-
-    int getY() const {return y;}
-    void setY(int y) {this->y=y;}
-
     void paint(QPainter *painter);
 
-signals:
-    void sourceChanged(int x);
-
 public:
+    Q_INVOKABLE void handleMousePress(int x, int y, int button, int buttons, int modifiers) {
+        QMouseEvent event(QEvent::MouseButtonPress, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
+        update();
+//        qDebug() <<"new mouse pressed" << event.pos() << event.buttons();
+    }
 
-    void onSourceChanged(int x) {
-        qDebug()<<"source change: "<<x;
+    Q_INVOKABLE void handleMouseRelease(int x, int y, int button, int buttons, int modifiers) {
+        QMouseEvent event(QEvent::MouseButtonRelease, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
+//        qDebug() <<"new mouse release" << event.pos() << event.buttons();
+    }
+
+    Q_INVOKABLE void handleMouseMove(int x, int y, int button, int buttons, int modifiers) {
+        QMouseEvent event(QEvent::MouseMove, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
+//        qDebug() <<"new mouse move" << event.pos() << event.buttons();
     }
 
 private:
-    int x = 10;
-    int y = 10;
+    QImage *m_image = nullptr;
 };
 
 #endif // DRAWINGBOARD_H

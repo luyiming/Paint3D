@@ -8,17 +8,18 @@
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
+
 }
 
 void DrawingBoard::paint(QPainter *painter){
-    QBrush brush(QColor("#007430"));
+    if (m_image == nullptr) {
+        m_image = new QImage(width(), height(), QImage::Format_RGB32);
+        QPainter *painter = new QPainter(m_image);
+        painter->fillRect(0, 0, m_image->width(), m_image->height(), Qt::white);
+        painter->end();
+    }
 
-    painter->setBrush(brush);
-    painter->setPen(QPen(QColor("#007430")));
-    painter->setRenderHint(QPainter::Antialiasing);
+    painter->drawImage(QPoint(0, 0), *m_image);
 
-//    painter->drawRoundedRect(0, 0, boundingRect().width(), boundingRect().height() - 10, 10, 10);
-
-    painter->drawLine(0, 0, x, y);
     qDebug() <<"paint";
 }

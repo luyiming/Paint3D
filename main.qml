@@ -72,24 +72,18 @@ Window {
         anchors.bottom: root.bottom
         anchors.left: root.left
 
-        Rectangle {
+        DrawingBoard {
             id: drawingboard
             anchors.centerIn: parent
             height: 480
             width: 640
-            color: "#ffffff"
-            DrawingBoard {
+            MouseArea {
+                hoverEnabled: true
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
                 anchors.fill: parent
-                x1: 100
-                y1: 100
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        parent.x1=mouseX;
-                        parent.y1=mouseY;
-                        parent.update()
-                    }
-                }
+                onPressed: parent.handleMousePress(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
+                onReleased: parent.handleMouseRelease(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
+                onPositionChanged: parent.handleMouseMove(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
             }
         }
 
