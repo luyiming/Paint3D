@@ -5,10 +5,30 @@
 #include <QBrush>
 #include <QObject>
 #include <QDebug>
+#include "instruments/pixelinstrument.h"
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
+    mInstrumentsHandlers.fill(nullptr, (int)INSTRUMENTS_COUNT);
+    mInstrumentsHandlers[PIXEL] = new PixelInstrument(this);
+}
 
+void DrawingBoard::handleMousePress(int x, int y, int button, int buttons, int modifiers) {
+    QMouseEvent event(QEvent::MouseButtonPress, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
+    mInstrumentsHandlers[PIXEL]->mousePressEvent(&event, *this);
+//  qDebug() <<"new mouse pressed" << event.pos() << event.buttons();
+}
+
+void DrawingBoard::handleMouseRelease(int x, int y, int button, int buttons, int modifiers) {
+    QMouseEvent event(QEvent::MouseButtonRelease, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
+    mInstrumentsHandlers[PIXEL]->mouseReleaseEvent(&event, *this);
+//   qDebug() <<"new mouse release" << event.pos() << event.buttons();
+}
+
+void DrawingBoard::handleMouseMove(int x, int y, int button, int buttons, int modifiers) {
+    QMouseEvent event(QEvent::MouseMove, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
+    mInstrumentsHandlers[PIXEL]->mouseMoveEvent(&event, *this);
+//  qDebug() <<"new mouse move" << event.pos() << event.buttons();
 }
 
 void DrawingBoard::paint(QPainter *painter){
@@ -21,5 +41,5 @@ void DrawingBoard::paint(QPainter *painter){
 
     painter->drawImage(QPoint(0, 0), *m_image);
 
-    qDebug() <<"paint";
+//    qDebug() <<"paint";
 }

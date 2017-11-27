@@ -7,6 +7,10 @@
 #include <QObject>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QList>
+#include "instrumentsenum.h"
+
+class AbstractInstrument;
 
 class DrawingBoard : public QQuickPaintedItem
 {
@@ -17,24 +21,19 @@ public:
     void paint(QPainter *painter);
 
 public:
-    Q_INVOKABLE void handleMousePress(int x, int y, int button, int buttons, int modifiers) {
-        QMouseEvent event(QEvent::MouseButtonPress, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
-        update();
-//        qDebug() <<"new mouse pressed" << event.pos() << event.buttons();
-    }
+    Q_INVOKABLE void handleMousePress(int x, int y, int button, int buttons, int modifiers);
+    Q_INVOKABLE void handleMouseRelease(int x, int y, int button, int buttons, int modifiers);
+    Q_INVOKABLE void handleMouseMove(int x, int y, int button, int buttons, int modifiers);
 
-    Q_INVOKABLE void handleMouseRelease(int x, int y, int button, int buttons, int modifiers) {
-        QMouseEvent event(QEvent::MouseButtonRelease, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
-//        qDebug() <<"new mouse release" << event.pos() << event.buttons();
-    }
-
-    Q_INVOKABLE void handleMouseMove(int x, int y, int button, int buttons, int modifiers) {
-        QMouseEvent event(QEvent::MouseMove, QPoint(x, y), (Qt::MouseButton)button, (Qt::MouseButtons)buttons, (Qt::KeyboardModifiers)modifiers);
-//        qDebug() <<"new mouse move" << event.pos() << event.buttons();
-    }
+public:
+    void setIsInPaint(bool isInPaint) { mIsInPaint = isInPaint; }
+    bool isInPaint() { return mIsInPaint; }
+    QImage* getImage() { return m_image; }
 
 private:
     QImage *m_image = nullptr;
+    bool mIsInPaint = false;
+    QVector<AbstractInstrument*> mInstrumentsHandlers;
 };
 
 #endif // DRAWINGBOARD_H

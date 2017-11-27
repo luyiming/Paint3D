@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     drawingboard.cpp \
     drawingboard.cpp \
     main.cpp \
-    painter/painter.cpp
+    painter/painter.cpp \
+    instruments/abstractinstrument.cpp \
+    instruments/pixelinstrument.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -37,4 +39,7 @@ DISTFILES +=
 HEADERS += \
     drawingboard.h \
     drawingboard.h \
-    painter/painter.h
+    painter/painter.h \
+    instruments/abstractinstrument.h \
+    instrumentsenum.h \
+    instruments/pixelinstrument.h
