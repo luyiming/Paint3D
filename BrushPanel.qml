@@ -53,8 +53,8 @@ Rectangle {
         spacing: 5
         columns: 5
 
-        property variant brushIconName: ["marker", "pixel", "pen", "crayon", "eraser", "fill", "oil-brush", "pencil", "spray-can", "watercolor"]
-        property variant brushTitleName: ["marker", "pixel", "pen", "crayon", "eraser", "fill", "oil-brush", "pencil", "spray-can", "watercolor"]
+        property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
+        property variant brushTitleName: ["马克笔", "钢笔", "油画笔", "水彩笔刷", "像素笔", "铅笔", "橡皮擦", "蜡笔", "喷雾罐", "填充"]
 
         Repeater {
             model: 10

@@ -9,8 +9,15 @@ Window {
     id: root
     visible: true
     width: 1400
+    minimumWidth: 1000
     height: 900
+    minimumHeight: 700
     title: qsTr("画图")
+
+    onWidthChanged: {
+       if (root.width < 1000)
+           root.width = 1000
+    }
 
     Header {
         id: header
@@ -18,12 +25,12 @@ Window {
         width: root.width
 
         onMenuClicked: {
-            menu.x = 0
+            menuShowAnimation.start()
         }
     }
 
-    Panel1 {
-        visible: header.currntHeader === 1
+    BrushPanel {
+        visible: header.currentHeader === 1
         id: panel
         width: 264
         height: root.height - header.height
@@ -39,8 +46,8 @@ Window {
         }
     }
 
-    Panel2 {
-        visible: header.currntHeader === 2
+    ShapePanel {
+        visible: header.currentHeader === 2
         id: panel2
         width: 264
         height: root.height - header.height
@@ -105,12 +112,24 @@ Window {
         height: root.height
         x: -root.width
         y: 0
-        Behavior on x {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
+        NumberAnimation {
+            id: menuShowAnimation
+            target: menu
+            property: "x"
+            duration: 200
+            easing.type: Easing.InOutQuad
+            from: -root.width
+            to: 0
         }
-        onReturnClicked: menu.x = -root.width
+        NumberAnimation {
+            id: menuHideAnimation
+            target: menu
+            property: "x"
+            duration: 200
+            easing.type: Easing.InOutQuad
+            from: 0
+            to: -root.width
+        }
+        onReturnClicked: menuHideAnimation.start()
     }
 }

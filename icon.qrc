@@ -150,5 +150,8 @@
         <file>icon/menu/save.png</file>
         <file>icon/menu/save-hover.png</file>
         <file>icon/menu/save-pressed.png</file>
+        <file>icon/menu/return.png</file>
+        <file>icon/menu/return-hover.png</file>
+        <file>icon/menu/return-pressed.png</file>
     </qresource>
 </RCC>

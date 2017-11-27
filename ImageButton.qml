@@ -9,7 +9,7 @@ Image {
 
     signal clicked
 
-    source: null
+    source: img
 
     MouseArea {
         id: mouseArea

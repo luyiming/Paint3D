@@ -22,7 +22,7 @@ Image {
 
     signal clicked
 
-    source: null
+    source: checked ? on_img : off_img
 
     onCheckedChanged: {
         if(mouseArea.containsMouse) {
@@ -46,6 +46,7 @@ Image {
 
         onClicked: {
             root.clicked()
+            root.checked = true
         }
 
         onPressed: {
@@ -56,8 +57,18 @@ Image {
         }
 
         onReleased: {
-            root.checked = true
-            root.source = on_hover_img
+            if(containsMouse) {
+                if (root.checked)
+                    root.source = on_hover_img
+                else
+                    root.source = off_hover_img
+            }
+            else {
+                if (root.checked)
+                    root.source = on_img
+                else
+                    root.source = off_img
+            }
         }
 
         onContainsMouseChanged: {

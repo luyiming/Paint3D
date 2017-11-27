@@ -6,7 +6,7 @@ Rectangle {
     color: "#363942"
     height: 48
 
-    property int currntHeader: 1
+    property int currentHeader: 1
 
     signal menuClicked
 
@@ -43,10 +43,8 @@ Rectangle {
 
                 onCheckedChanged: {
                     if (checked)
-                        currntHeader = index + 1
+                        currentHeader = index + 1
                 }
-
-                source: 'qrc:/icon/header/' + centerHeader.headerName[index] + '-off.png'
 
                 on_img: 'qrc:/icon/header/' + centerHeader.headerName[index] + '-on.png'
                 on_hover_img: 'qrc:/icon/header/' + centerHeader.headerName[index] + '-on-hover.png'

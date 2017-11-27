@@ -14,6 +14,13 @@ Rectangle {
             height: root.height
 
             Column {
+                ImageButton {
+                    img: 'qrc:/icon/menu/return.png'
+                    hover_img: 'qrc:/icon/menu/return-hover.png'
+                    pressed_img: 'qrc:/icon/menu/return-pressed.png'
+                    onClicked: root.returnClicked()
+                }
+
                 Repeater {
                     model: ['new', 'open', 'save']
                     CheckableButton {
@@ -25,8 +32,6 @@ Rectangle {
                         off_img: 'qrc:/icon/menu/' + modelData + '.png'
                         off_hover_img: 'qrc:/icon/menu/' + modelData + '-hover.png'
                         off_pressed_img: 'qrc:/icon/menu/' + modelData + '-pressed.png'
-
-                        onClicked: root.returnClicked()
                     }
                 }
             }
@@ -46,12 +51,22 @@ Rectangle {
             color: "lightgrey"
             Rectangle {
                 anchors.centerIn: parent
-                Text {
+                Column {
                     anchors.centerIn: parent
-                    font.family: 'Microsoft Yahei UI'
-                    font.pixelSize: 50
-                    text: '3D Paint'
-                    color: "#0f568b"
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: 'Microsoft Yahei UI'
+                        font.pixelSize: 50
+                        text: '3D Paint'
+                        color: "#0064b6"
+                    }
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: 'Microsoft Yahei UI'
+                        font.pixelSize: 30
+                        text: 'Lu Yiming'
+                        color: "grey"
+                    }
                 }
             }
         }
