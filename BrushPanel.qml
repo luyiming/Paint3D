@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
+import luyiming 1.0
 
 Rectangle {
     id: panel
@@ -9,6 +10,7 @@ Rectangle {
     color: "#f0f2f3"
 
     property ParallelAnimation titleAnimation: titleAnimation
+    property int instrument: DrawingBoard.INSTRUMENT_NONE
 
     ParallelAnimation {
         id: titleAnimation
@@ -39,7 +41,7 @@ Rectangle {
         color: "#0064b6"
         font.pixelSize: 18
         font.family: "Microsoft Yahei UI"
-        text: '像素笔'
+        text: ''
     }
 
     ExclusiveGroup { id: shapeGroup }
@@ -55,7 +57,9 @@ Rectangle {
 
         property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
         property variant brushTitleName: ["马克笔", "钢笔", "油画笔", "水彩笔刷", "像素笔", "铅笔", "橡皮擦", "蜡笔", "喷雾罐", "填充"]
-
+        property variant brushType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                                 DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                                 DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
         Repeater {
             model: 10
 
@@ -78,6 +82,7 @@ Rectangle {
                     if (checked && bigTitle.text !== brushes.brushTitleName[index]) {
                         bigTitle.text = brushes.brushTitleName[index]
                         titleAnimation.start()
+                        panel.instrument = brushes.brushType[index]
                     }
                 }
             }

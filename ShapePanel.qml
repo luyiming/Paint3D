@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
+import luyiming 1.0
 
 Rectangle {
     id: panel
@@ -8,6 +9,7 @@ Rectangle {
     color: "#f0f2f3"
 
     property ParallelAnimation titleAnimation: titleAnimation
+    property int instrument: DrawingBoard.INSTRUMENT_NONE
 
     ParallelAnimation {
         id: titleAnimation
@@ -39,8 +41,10 @@ Rectangle {
         color: "#0064b6"
         font.pixelSize: 18
         font.family: "Microsoft Yahei UI"
-        text: '直线和曲线'
+        text: ''
     }
+
+    ExclusiveGroup { id: shapeGroup }
 
     Text {
         id: title1
@@ -54,8 +58,6 @@ Rectangle {
         text: '直线和曲线'
     }
 
-    ExclusiveGroup { id: shapeGroup }
-
     Row {
         id: lines_and_curves
         width: 220
@@ -63,8 +65,12 @@ Rectangle {
         anchors.top: title1.bottom
         anchors.topMargin: 12
 
+        property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
+        property variant shapeTitleName: ["line", "curve2", "curve3", "curve4"]
+        property variant shapeType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+
         Repeater {
-            model: ["line", "curve2", "curve3", "curve4"]
+            model: 4
 
             CheckableButton {
                 width: 40
@@ -72,19 +78,20 @@ Rectangle {
 
                 exclusiveGroup: shapeGroup
 
-                source: 'qrc:/icon/2dshape/' + modelData + '.png'
+                source: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '.png'
 
-                on_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                on_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                on_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                off_img: 'qrc:/icon/2dshape/' + modelData + '.png'
-                off_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                off_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-pressed.png'
+                on_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                on_hover_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                on_pressed_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                off_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '.png'
+                off_hover_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                off_pressed_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-pressed.png'
 
                 onCheckedChanged: {
-                    if (checked && bigTitle.text != '直线和曲线') {
-                        bigTitle.text = '直线和曲线'
+                    if (checked && bigTitle.text !== lines_and_curves.shapeTitleName[index]) {
+                        bigTitle.text = lines_and_curves.shapeTitleName[index]
                         titleAnimation.start()
+                        panel.instrument = lines_and_curves.shapeType[index]
                     }
                 }
             }
@@ -112,10 +119,18 @@ Rectangle {
         columns: 5
         spacing: 5
 
+        property variant shapeIconName: ["circle", "capsule", "square", "rounded-square", "triangle",
+            "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
+            "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
+        property variant shapeTitleName: ["circle", "capsule", "square", "rounded-square", "triangle",
+            "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
+            "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
+        property variant shapeType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+            DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+            DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+
         Repeater {
-            model: ["circle", "capsule", "square", "rounded-square", "triangle",
-                    "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
-                    "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
+            model: 15
 
             CheckableButton {
                 width: 40
@@ -123,19 +138,20 @@ Rectangle {
 
                 exclusiveGroup: shapeGroup
 
-                source: 'qrc:/icon/2dshape/' + modelData + '.png'
+                source: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
 
-                on_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                on_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                on_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                off_img: 'qrc:/icon/2dshape/' + modelData + '.png'
-                off_hover_img: 'qrc:/icon/2dshape/' + modelData + '-on.png'
-                off_pressed_img: 'qrc:/icon/2dshape/' + modelData + '-pressed.png'
+                on_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                on_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                on_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                off_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
+                off_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                off_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-pressed.png'
 
                 onCheckedChanged: {
-                    if (checked && bigTitle.text != '2D 形状') {
-                        bigTitle.text = '2D 形状'
+                    if (checked && bigTitle.text !== shapes.shapeTitleName[index]) {
+                        bigTitle.text = shapes.shapeTitleName[index]
                         titleAnimation.start()
+                        panel.instrument = shapes.shapeType[index]
                     }
                 }
             }

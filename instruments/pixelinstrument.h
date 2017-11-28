@@ -16,7 +16,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board);
 
 protected:
-    void paint(DrawingBoard &board);
+    void draw(DrawingBoard &board);
 
 };
 

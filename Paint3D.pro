@@ -41,5 +41,4 @@ HEADERS += \
     drawingboard.h \
     painter/painter.h \
     instruments/abstractinstrument.h \
-    instrumentsenum.h \
     instruments/pixelinstrument.h

@@ -14,7 +14,6 @@ void PixelInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
     if(event->button() == Qt::LeftButton) {
         mStartPoint = mEndPoint = event->pos();
         board.setIsInPaint(true);
-//        makeUndoCommand(board);
     }
 }
 
@@ -22,7 +21,7 @@ void PixelInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
-        paint(board);
+        draw(board);
         mStartPoint = event->pos();
     }
 }
@@ -31,12 +30,12 @@ void PixelInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
-        paint(board);
+        draw(board);
         board.setIsInPaint(false);
     }
 }
 
-void PixelInstrument::paint(DrawingBoard &board)
+void PixelInstrument::draw(DrawingBoard &board)
 {
     QPainter painter(board.getImage());
 

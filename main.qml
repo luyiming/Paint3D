@@ -44,6 +44,7 @@ Window {
                 titleAnimation.start()
             }
         }
+        onInstrumentChanged: drawingboard.instrument = instrument
     }
 
     ShapePanel {
@@ -61,6 +62,7 @@ Window {
                 titleAnimation.start()
             }
         }
+        onInstrumentChanged: drawingboard.instrument = instrument
     }
 
     Rectangle {
