@@ -66,7 +66,7 @@ Rectangle {
         anchors.topMargin: 12
 
         property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
-        property variant shapeTitleName: ["line", "curve2", "curve3", "curve4"]
+        property variant shapeTitleName: ["直线", "两点曲线", "三点曲线", "四点曲线"]
         property variant shapeType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
 
         Repeater {
@@ -92,6 +92,7 @@ Rectangle {
                         bigTitle.text = lines_and_curves.shapeTitleName[index]
                         titleAnimation.start()
                         panel.instrument = lines_and_curves.shapeType[index]
+                        panel.instrumentChanged()
                     }
                 }
             }
@@ -122,9 +123,9 @@ Rectangle {
         property variant shapeIconName: ["circle", "capsule", "square", "rounded-square", "triangle",
             "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
             "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
-        property variant shapeTitleName: ["circle", "capsule", "square", "rounded-square", "triangle",
-            "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
-            "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
+        property variant shapeTitleName: ["圆形", "胶囊形", "矩形", "圆角矩形", "三角形",
+            "五边形", "六边形", "菱形", "直角三角形", "arrow",
+            "pointed-arrow", "圆弧", "五角星", "六角星", "四角星"]
         property variant shapeType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
             DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
             DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
@@ -152,6 +153,7 @@ Rectangle {
                         bigTitle.text = shapes.shapeTitleName[index]
                         titleAnimation.start()
                         panel.instrument = shapes.shapeType[index]
+                        panel.instrumentChanged()
                     }
                 }
             }

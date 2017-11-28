@@ -1,8 +1,21 @@
 import QtQuick 2.0
+import QtQuick.Dialogs 1.2
 
 Rectangle {
     id: root
     signal returnClicked
+
+    FileDialog {
+        id: saveFileDialog
+        title: "Please choose a file"
+        folder: "."
+        onAccepted: {
+            console.log("You chose: " + fileDialog.fileUrls)
+        }
+        onRejected: {
+            console.log("Canceled")
+        }
+    }
 
     Row {
         anchors.fill: root
@@ -32,6 +45,8 @@ Rectangle {
                         off_img: 'qrc:/icon/menu/' + modelData + '.png'
                         off_hover_img: 'qrc:/icon/menu/' + modelData + '-hover.png'
                         off_pressed_img: 'qrc:/icon/menu/' + modelData + '-pressed.png'
+
+                        onClicked: saveFileDialog.open()
                     }
                 }
             }

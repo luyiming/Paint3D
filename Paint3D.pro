@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     main.cpp \
     painter/painter.cpp \
     instruments/abstractinstrument.cpp \
-    instruments/pixelinstrument.cpp
+    instruments/pixelinstrument.cpp \
+    instruments/lineinstrument.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -41,4 +42,5 @@ HEADERS += \
     drawingboard.h \
     painter/painter.h \
     instruments/abstractinstrument.h \
-    instruments/pixelinstrument.h
+    instruments/pixelinstrument.h \
+    instruments/lineinstrument.h

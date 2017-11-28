@@ -42,6 +42,7 @@ Window {
         onVisibleChanged: {
             if (visible) {
                 titleAnimation.start()
+                popupAnimation.start()
             }
         }
         onInstrumentChanged: drawingboard.instrument = instrument

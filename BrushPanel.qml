@@ -10,6 +10,7 @@ Rectangle {
     color: "#f0f2f3"
 
     property ParallelAnimation titleAnimation: titleAnimation
+    property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
 
     ParallelAnimation {
@@ -29,6 +30,18 @@ Rectangle {
             easing.type: Easing.InOutQuad
             from: 0
             to: 1
+        }
+    }
+
+    ParallelAnimation {
+        id: popupAnimation
+        NumberAnimation {
+            target: brushes
+            property: "anchors.verticalCenterOffset"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: -30
+            to: 0
         }
     }
 
@@ -83,13 +96,13 @@ Rectangle {
                         bigTitle.text = brushes.brushTitleName[index]
                         titleAnimation.start()
                         panel.instrument = brushes.brushType[index]
+                        panel.instrumentChanged()
                     }
                 }
             }
         }
 
     }
-
 
     Item {
         id: title3
@@ -126,8 +139,6 @@ Rectangle {
             }
         }
     }
-
-
 
     Slider {
         id: thickness
