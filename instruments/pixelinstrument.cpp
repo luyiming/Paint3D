@@ -37,9 +37,13 @@ void PixelInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 
 void PixelInstrument::draw(DrawingBoard &board)
 {
+    QPen pen;
+    QColor color = board.brushColor();
+    color.setAlphaF(board.opaqueness() / 100.0);
+    pen.setColor(color);
+    pen.setWidth(board.thickness());
     QPainter painter(board.getImage());
-
-    painter.setPen(QPen(Qt::black));
+    painter.setPen(pen);
 
     if(mStartPoint != mEndPoint)
     {

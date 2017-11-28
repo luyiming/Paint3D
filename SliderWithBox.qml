@@ -10,7 +10,7 @@ ColumnLayout {
     property int minimumValue: 1
     property int maximumValue: 100
     property int stepSize: 1
-    property int value: 2
+    property int value: 1
 
     RowLayout {
         Layout.preferredWidth: root.width
@@ -47,6 +47,7 @@ ColumnLayout {
         maximumValue: root.maximumValue
         stepSize: root.stepSize
         value: root.value
+        onValueChanged: root.value = value
     }
 }
 

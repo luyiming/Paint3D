@@ -67,7 +67,7 @@ Rectangle {
 
         property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
         property variant shapeTitleName: ["直线", "两点曲线", "三点曲线", "四点曲线"]
-        property variant shapeType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+        property variant shapeType: [DrawingBoard.SHAPE_LINE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
 
         Repeater {
             model: 4
@@ -92,7 +92,6 @@ Rectangle {
                         bigTitle.text = lines_and_curves.shapeTitleName[index]
                         titleAnimation.start()
                         panel.instrument = lines_and_curves.shapeType[index]
-                        panel.instrumentChanged()
                     }
                 }
             }

@@ -14,11 +14,6 @@ Window {
     minimumHeight: 700
     title: qsTr("画图")
 
-    onWidthChanged: {
-       if (root.width < 1000)
-           root.width = 1000
-    }
-
     Header {
         id: header
         anchors.top: root.top
@@ -27,11 +22,20 @@ Window {
         onMenuClicked: {
             menuShowAnimation.start()
         }
+        onCurrentHeaderChanged: {
+            if (currentHeader === 1)
+                drawingboard.instrument = brushPanel.instrument
+            else if (currentHeader === 2)
+                drawingboard.instrument = shapePanel.instrument
+            else {
+                console.log('not implemented in header instrument selection')
+            }
+        }
     }
 
     BrushPanel {
         visible: header.currentHeader === 1
-        id: panel
+        id: brushPanel
         width: 264
         height: root.height - header.height
         anchors.top: header.bottom
@@ -42,15 +46,17 @@ Window {
         onVisibleChanged: {
             if (visible) {
                 titleAnimation.start()
-                popupAnimation.start()
             }
         }
         onInstrumentChanged: drawingboard.instrument = instrument
+        onThicknessChanged: drawingboard.thickness = thickness
+        onOpaquenessChanged: drawingboard.opaqueness = opaqueness
+        onBrushColorChanged: drawingboard.brushColor = brushColor
     }
 
     ShapePanel {
         visible: header.currentHeader === 2
-        id: panel2
+        id: shapePanel
         width: 264
         height: root.height - header.height
         anchors.top: header.bottom
@@ -69,7 +75,7 @@ Window {
     Rectangle {
         id: board
         color: "#b6b9b7"
-        width: root.width - panel.width
+        width: root.width - brushPanel.width
         height: root.height - header.height
         anchors.top: header.bottom
         anchors.bottom: root.bottom

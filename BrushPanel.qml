@@ -13,12 +13,14 @@ Rectangle {
     property ParallelAnimation titleAnimation: titleAnimation
     property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
+    property int thickness: thicknessSlider.value
+    property int opaqueness: opaquenessSlider.value
+    property color brushColor: currentColorBlock.color
 
     ColorDialog {
         id: colorDialog
         showAlphaChannel: true
         onAccepted: {
-            console.log("You chose: " + colorDialog.color)
             currentColorBlock.color = colorDialog.color
         }
     }
@@ -40,18 +42,6 @@ Rectangle {
             easing.type: Easing.InOutQuad
             from: 0
             to: 1
-        }
-    }
-
-    ParallelAnimation {
-        id: popupAnimation
-        NumberAnimation {
-            target: brushes
-            property: "anchors.verticalCenterOffset"
-            duration: 250
-            easing.type: Easing.InOutQuad
-            from: -30
-            to: 0
         }
     }
 
@@ -106,7 +96,6 @@ Rectangle {
                             bigTitle.text = brushes.brushTitleName[index]
                             titleAnimation.start()
                             panel.instrument = brushes.brushType[index]
-                            panel.instrumentChanged()
                         }
                     }
                 }
@@ -115,18 +104,18 @@ Rectangle {
         }
 
         SliderWithBox {
-            id: thickness
+            id: thicknessSlider
             width: 220
             title: '粗细'
             postfixText: '像素'
             minimumValue: 1
             maximumValue: 100
             stepSize: 1
-            value: 2
+            value: 1
         }
 
         SliderWithBox {
-            id: opaqueness
+            id: opaquenessSlider
             width: 220
             title: '不透明度'
             postfixText: '%'
@@ -150,7 +139,7 @@ Rectangle {
             id: currentColorBlock
             width: 140
             height: 44
-            color: "#ffffff"
+            color: "#000000"
             border.width: 0
             border.color: "#305ccc"
             MouseArea {
@@ -189,14 +178,8 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         hoverEnabled: true
-                        onContainsMouseChanged: {
-                            if(containsMouse) {
-                                parent.border.width = 2
-                            }
-                            else {
-                                parent.border.width = 0
-                            }
-                        }
+                        onHoveredChanged: parent.border.width = containsMouse ? 2 : 0
+                        onClicked: currentColorBlock.color = colorPanel.colorArray[index]
                     }
                 }
             }
