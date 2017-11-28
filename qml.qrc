@@ -7,5 +7,7 @@
         <file>BrushPanel.qml</file>
         <file>FullScreenMenu.qml</file>
         <file>CheckableButton.qml</file>
+        <file>BlueSlider.qml</file>
+        <file>SliderWithBox.qml</file>
     </qresource>
 </RCC>

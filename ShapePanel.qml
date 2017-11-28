@@ -41,7 +41,7 @@ Rectangle {
         color: "#0064b6"
         font.pixelSize: 18
         font.family: "Microsoft Yahei UI"
-        text: ''
+        text: '2D形状'
     }
 
     ExclusiveGroup { id: shapeGroup }
