@@ -209,32 +209,50 @@ Rectangle {
             text: '边框颜色'
         }
 
-        Rectangle {
-            width: 50
-            height: 50
-            color: "#f0f2f3"
-            border.width: 1
-            border.color: "#d2d2d2"
+        RowLayout {
             Rectangle {
-                id: boarderColorBlock
-                width: 30
-                height: 30
-                color: "#000000"
-                anchors.centerIn: parent
-            }
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onContainsMouseChanged: {
-                    if(containsMouse) {
-                        parent.border.color = "#305ccc"
+                width: 50
+                height: 50
+                color: "#f0f2f3"
+                border.width: 1
+                border.color: "#d2d2d2"
+                Rectangle {
+                    id: boarderColorBlock
+                    width: 30
+                    height: 30
+                    color: "#000000"
+                    anchors.centerIn: parent
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(containsMouse) {
+                            parent.border.color = "#305ccc"
+                        }
+                        else {
+                            parent.border.color = "#d2d2d2"
+                        }
                     }
-                    else {
-                        parent.border.color = "#d2d2d2"
+                    onClicked: {
+                        boarderColorDialog.open()
                     }
                 }
-                onClicked: {
-                    boarderColorDialog.open()
+            }
+
+            ComboBox {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                model: [ "Solid", "None" ]
+                style: ComboBoxStyle {
+                    background: Rectangle {
+                        id: comboBack
+                        height: 50
+                        width: 150
+                        color: "#f5f5f5"
+                        border.width: 1
+                        border.color: control.hovered ? "#1760c1" : "#d2d2d2"
+                    }
                 }
             }
         }
