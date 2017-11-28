@@ -14,10 +14,7 @@ public:
     void mousePressEvent(QMouseEvent *event, DrawingBoard &board);
     void mouseMoveEvent(QMouseEvent *event, DrawingBoard &board);
     void mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board);
-
-protected:
     void draw(DrawingBoard &board);
-
 };
 
 #endif // LINEINSTRUMENT_H

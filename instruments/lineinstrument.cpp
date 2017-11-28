@@ -23,7 +23,6 @@ void LineInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
-        board.setImage(mImageCopy);
         draw(board);
     }
 }
@@ -32,18 +31,19 @@ void LineInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
-        board.setImage(mImageCopy);
         draw(board);
         board.setIsInPaint(false);
     }
 }
 
+
 void LineInstrument::draw(DrawingBoard &board)
 {
+    board.setImage(mImageCopy);
     QPainter painter(board.getImage());
 
-    painter.setPen(QPen(Qt::black));
-//    painter.setPen(QPen(board.brushColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+//    painter.setPen(QPen(Qt::black));
+    painter.setPen(QPen(board.brushColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     if(mStartPoint != mEndPoint)
     {

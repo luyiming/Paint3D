@@ -17,12 +17,11 @@ public:
     virtual void mousePressEvent(QMouseEvent *event, DrawingBoard &board) = 0;
     virtual void mouseMoveEvent(QMouseEvent *event, DrawingBoard &board) = 0;
     virtual void mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board) = 0;
+    virtual void draw(DrawingBoard &board) = 0;
 
 protected:
     QPoint mStartPoint, mEndPoint;
     QImage mImageCopy; /**< Image for storing copy of current image on DrawingBoard, needed for some instruments. */
-
-    virtual void draw(DrawingBoard &board) = 0;
 };
 
 #endif // ABSTRACTINSTRUMENT_H

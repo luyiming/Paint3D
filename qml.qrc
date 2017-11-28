@@ -9,5 +9,6 @@
         <file>CheckableButton.qml</file>
         <file>BlueSlider.qml</file>
         <file>SliderWithBox.qml</file>
+        <file>LineAttributePanel.qml</file>
     </qresource>
 </RCC>

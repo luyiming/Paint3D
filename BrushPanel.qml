@@ -11,7 +11,6 @@ Rectangle {
     color: "#f0f2f3"
 
     property ParallelAnimation titleAnimation: titleAnimation
-    property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
     property int thickness: thicknessSlider.value
     property int opaqueness: opaquenessSlider.value
@@ -105,6 +104,7 @@ Rectangle {
 
         SliderWithBox {
             id: thicknessSlider
+            Layout.topMargin: 10
             width: 220
             title: '粗细'
             postfixText: '像素'
@@ -140,17 +140,17 @@ Rectangle {
             width: 140
             height: 44
             color: "#000000"
-            border.width: 0
-            border.color: "#305ccc"
+            border.width: 1
+            border.color: "#f0f2f3"
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
                 onContainsMouseChanged: {
                     if(containsMouse) {
-                        parent.border.width = 1
+                        parent.border.color = "#305ccc"
                     }
                     else {
-                        parent.border.width = 0
+                        parent.border.color = "#f0f2f3"
                     }
                 }
                 onClicked: {
