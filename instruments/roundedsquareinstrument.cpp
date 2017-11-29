@@ -1,16 +1,16 @@
-#include "circleinstrument.h"
+#include "roundedsquareinstrument.h"
 #include "../drawingboard.h"
 #include <QPen>
 #include <QPainter>
 
-CircleInstrument::CircleInstrument(QObject *parent) :
+RoundedSquareInstrument::RoundedSquareInstrument(QObject *parent) :
     AbstractInstrument(parent)
 {
 
 }
 
 
-void CircleInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
+void RoundedSquareInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(event->button() == Qt::LeftButton) {
         mStartPoint = mEndPoint = event->pos();
@@ -19,7 +19,7 @@ void CircleInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
     }
 }
 
-void CircleInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
+void RoundedSquareInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
@@ -27,7 +27,7 @@ void CircleInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
     }
 }
 
-void CircleInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
+void RoundedSquareInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
@@ -37,7 +37,7 @@ void CircleInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board
 }
 
 
-void CircleInstrument::draw(DrawingBoard &board)
+void RoundedSquareInstrument::draw(DrawingBoard &board)
 {
     board.setImage(mImageCopy);
     QPainter painter(board.getImage());
@@ -71,12 +71,7 @@ void CircleInstrument::draw(DrawingBoard &board)
 
     if(mStartPoint != mEndPoint)
     {
-        painter.drawEllipse(QRect(mStartPoint, mEndPoint));
-    }
-
-    if(mStartPoint == mEndPoint)
-    {
-        painter.drawPoint(mStartPoint);
+        painter.drawRoundedRect(QRect(mStartPoint, mEndPoint), 5, 5);
     }
 
     painter.end();

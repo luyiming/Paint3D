@@ -42,6 +42,8 @@ public:
         BRUSH_PIXEL,
         SHAPE_LINE,
         SHAPE_CIRCLE,
+        SHAPE_SQUARE,
+        SHAPE_ROUNDED_SQUARE,
 
         // Don't use it. (Used to know count of instruments)
         INSTRUMENTS_COUNT

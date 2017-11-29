@@ -20,7 +20,9 @@ SOURCES += main.cpp \
     instruments/abstractinstrument.cpp \
     instruments/pixelinstrument.cpp \
     instruments/lineinstrument.cpp \
-    instruments/circleinstrument.cpp
+    instruments/circleinstrument.cpp \
+    instruments/squareinstrument.cpp \
+    instruments/roundedsquareinstrument.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -45,4 +47,6 @@ HEADERS += \
     instruments/abstractinstrument.h \
     instruments/pixelinstrument.h \
     instruments/lineinstrument.h \
-    instruments/circleinstrument.h
+    instruments/circleinstrument.h \
+    instruments/squareinstrument.h \
+    instruments/roundedsquareinstrument.h

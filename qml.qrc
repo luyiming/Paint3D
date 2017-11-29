@@ -11,5 +11,6 @@
         <file>SliderWithBox.qml</file>
         <file>LineAttributePanel.qml</file>
         <file>DropDownBox.qml</file>
+        <file>CanvasPanel.qml</file>
     </qresource>
 </RCC>

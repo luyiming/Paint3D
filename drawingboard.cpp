@@ -8,6 +8,8 @@
 #include "instruments/pixelinstrument.h"
 #include "instruments/lineinstrument.h"
 #include "instruments/circleinstrument.h"
+#include "instruments/squareinstrument.h"
+#include "instruments/roundedsquareinstrument.h"
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
@@ -15,6 +17,8 @@ DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
     m_instrumentHandlers[BRUSH_PIXEL] = new PixelInstrument(this);
     m_instrumentHandlers[SHAPE_LINE] = new LineInstrument(this);
     m_instrumentHandlers[SHAPE_CIRCLE] = new CircleInstrument(this);
+    m_instrumentHandlers[SHAPE_SQUARE] = new SquareInstrument(this);
+    m_instrumentHandlers[SHAPE_ROUNDED_SQUARE] = new RoundedSquareInstrument(this);
 }
 
 void DrawingBoard::handleMousePress(int x, int y, int button, int buttons, int modifiers) {

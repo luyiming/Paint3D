@@ -170,10 +170,10 @@ Rectangle {
                 property variant shapeIconName: ["circle", "capsule", "square", "rounded-square", "triangle",
                     "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
                     "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
-                property variant shapeTitleName: ["圆形", "胶囊形(TODO)", "矩形(TODO)", "圆角矩形(TODO)", "三角形(TODO)",
+                property variant shapeTitleName: ["圆形", "胶囊形(TODO)", "矩形", "圆角矩形", "三角形(TODO)",
                     "五边形(TODO)", "六边形(TODO)", "菱形(TODO)", "直角三角形(TODO)", "arrow(TODO)",
                     "pointed-arrow(TODO)", "圆弧(TODO)", "五角星(TODO)", "六角星(TODO)", "四角星(TODO)"]
-                property variant shapeType: [DrawingBoard.SHAPE_CIRCLE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                property variant shapeType: [DrawingBoard.SHAPE_CIRCLE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.SHAPE_SQUARE, DrawingBoard.SHAPE_ROUNDED_SQUARE, DrawingBoard.INSTRUMENT_NONE,
                     DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
                     DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
 
@@ -302,7 +302,7 @@ Rectangle {
                 id: borderStyle
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                model: [ "Solid", "None" ]
+                model: [ "Solid", "Dash", "Dot", "DashDot", "None" ]
                 font.pointSize: 10
                 font.family: "Microsoft Yahei UI"
             }
