@@ -19,6 +19,9 @@ DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
     m_instrumentHandlers[SHAPE_CIRCLE] = new CircleInstrument(this);
     m_instrumentHandlers[SHAPE_SQUARE] = new SquareInstrument(this);
     m_instrumentHandlers[SHAPE_ROUNDED_SQUARE] = new RoundedSquareInstrument(this);
+
+    mUndoStack = new QUndoStack(this);
+    mUndoStack->setUndoLimit(100);
 }
 
 void DrawingBoard::handleMousePress(int x, int y, int button, int buttons, int modifiers) {
@@ -54,4 +57,9 @@ void DrawingBoard::paint(QPainter *painter){
     }
 
     painter->drawImage(QPoint(0, 0), *m_image);
+}
+
+void DrawingBoard::pushUndoCommand(UndoCommand *command) {
+    if (command != NULL)
+        mUndoStack->push(command);
 }

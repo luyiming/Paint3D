@@ -9,6 +9,8 @@
 #include <QMouseEvent>
 #include <QList>
 #include <QString>
+#include <QUndoStack>
+#include "undocommand.h"
 
 class AbstractInstrument;
 
@@ -67,6 +69,8 @@ public:
     QColor fillColor() { return m_fillColor; }
     QString borderStyle() { return m_borderStyle; }
     QString fillStyle() { return m_fillStyle; }
+    void pushUndoCommand(UndoCommand *command);
+
 
 private:
     QImage *m_image = nullptr;
@@ -80,6 +84,8 @@ private:
     QColor m_brushColor = Qt::black;
     QVector<AbstractInstrument*> m_instrumentHandlers;
     InstrumentType m_instrument = INSTRUMENT_NONE;
+
+    QUndoStack *mUndoStack;
 };
 
 #endif // DRAWINGBOARD_H

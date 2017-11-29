@@ -1,4 +1,4 @@
-QT += quick
+QT += quick widgets
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     instruments/lineinstrument.cpp \
     instruments/circleinstrument.cpp \
     instruments/squareinstrument.cpp \
-    instruments/roundedsquareinstrument.cpp
+    instruments/roundedsquareinstrument.cpp \
+    undocommand.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -49,4 +50,5 @@ HEADERS += \
     instruments/lineinstrument.h \
     instruments/circleinstrument.h \
     instruments/squareinstrument.h \
-    instruments/roundedsquareinstrument.h
+    instruments/roundedsquareinstrument.h \
+    undocommand.h

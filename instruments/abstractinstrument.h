@@ -22,6 +22,8 @@ public:
 protected:
     QPoint mStartPoint, mEndPoint;
     QImage mImageCopy; /**< Image for storing copy of current image on DrawingBoard, needed for some instruments. */
+
+    virtual void makeUndoCommand(DrawingBoard &board);
 };
 
 #endif // ABSTRACTINSTRUMENT_H
