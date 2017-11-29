@@ -216,7 +216,7 @@ Rectangle {
             minimumValue: 1
             maximumValue: 100
             stepSize: 1
-            value: 1
+            value: 2
         }
 
         SliderWithBox {

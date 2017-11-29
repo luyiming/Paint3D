@@ -26,6 +26,12 @@ private:
     // ry: y轴方向短半轴 (0, ry)
     void drawEllipse(int x1, int y1, int rx, int ry, QColor color);
 
+    void alphablend(int x, int y, float alpha, QColor color);
+    float capsuleSDF(float px, float py, float ax, float ay, float bx, float by, float r);
+    float circleSDF(float px, float py,float x, float y, float r, float width);
+    void lineSDFAABB(float ax, float ay, float bx, float by, float r, QColor color);
+    void circleSDFAABB(float x, float y, float radius, float width, QColor color);
+
 private:
     QImage *mImage = NULL;
 
