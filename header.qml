@@ -7,8 +7,12 @@ Rectangle {
     height: 48
 
     property int currentHeader: 1
+    property bool canUndo: false
+    property bool canRedo: false
 
     signal menuClicked
+    signal undoClicked
+    signal redoClicked
 
     ImageButton {
         id: menu_button
@@ -62,18 +66,49 @@ Rectangle {
 
         anchors.right: header.right
 
-        Repeater {
-            model: ["undo", "history", "redo", "more"]
+        ImageButton {
+            height: header.height
 
-            ImageButton {
-                height: header.height
+            source: 'qrc:/icon/header/undo.png'
 
-                source: 'qrc:/icon/header/' + modelData + '.png'
+            img: 'qrc:/icon/header/undo.png'
+            hover_img: 'qrc:/icon/header/undo-hover.png'
+            pressed_img: 'qrc:/icon/header/undo-pressed.png'
 
-                img: 'qrc:/icon/header/' + modelData + '.png'
-                hover_img: 'qrc:/icon/header/' + modelData + '-hover.png'
-                pressed_img: 'qrc:/icon/header/' + modelData + '-pressed.png'
-            }
+            onClicked: header.undoClicked()
+            enabled: canUndo
+        }
+        ImageButton {
+            height: header.height
+
+            source: 'qrc:/icon/header/history.png'
+
+            img: 'qrc:/icon/header/history.png'
+            hover_img: 'qrc:/icon/header/history-hover.png'
+            pressed_img: 'qrc:/icon/header/history-pressed.png'
+
+            enabled: false
+        }
+        ImageButton {
+            height: header.height
+
+            source: 'qrc:/icon/header/redo.png'
+
+            img: 'qrc:/icon/header/redo.png'
+            hover_img: 'qrc:/icon/header/redo-hover.png'
+            pressed_img: 'qrc:/icon/header/redo-pressed.png'
+
+            onClicked: header.redoClicked()
+            enabled: canRedo
+        }
+        ImageButton {
+            height: header.height
+
+            source: 'qrc:/icon/header/more.png'
+
+            img: 'qrc:/icon/header/more.png'
+            hover_img: 'qrc:/icon/header/more-hover.png'
+            pressed_img: 'qrc:/icon/header/more-pressed.png'
         }
     }
 }

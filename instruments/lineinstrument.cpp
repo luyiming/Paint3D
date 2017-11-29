@@ -16,6 +16,7 @@ void LineInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
         mStartPoint = mEndPoint = event->pos();
         board.setIsInPaint(true);
         mImageCopy = QImage(*board.getImage());
+        makeUndoCommand(board);
     }
 }
 
@@ -44,6 +45,8 @@ void LineInstrument::draw(DrawingBoard &board)
 
 //    painter.setPen(QPen(Qt::black));
     painter.setPen(QPen(board.borderColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+    painter.setOpacity(board.opaqueness() / 100.0);
 
     if(mStartPoint != mEndPoint)
     {

@@ -16,6 +16,7 @@ void SquareInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
         mStartPoint = mEndPoint = event->pos();
         board.setIsInPaint(true);
         mImageCopy = QImage(*board.getImage());
+        makeUndoCommand(board);
     }
 }
 
@@ -68,6 +69,8 @@ void SquareInstrument::draw(DrawingBoard &board)
         brush.setStyle(Qt::SolidPattern);
     }
     painter.setBrush(brush);
+
+    painter.setOpacity(board.opaqueness() / 100.0);
 
     if(mStartPoint != mEndPoint)
     {

@@ -10,11 +10,13 @@
 #include "instruments/circleinstrument.h"
 #include "instruments/squareinstrument.h"
 #include "instruments/roundedsquareinstrument.h"
+#include "instruments/fillinstrument.h"
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
     m_instrumentHandlers.fill(NULL, (int)INSTRUMENTS_COUNT);
     m_instrumentHandlers[BRUSH_PIXEL] = new PixelInstrument(this);
+    m_instrumentHandlers[BRUSH_FILL] = new FillInstrument(this);
     m_instrumentHandlers[SHAPE_LINE] = new LineInstrument(this);
     m_instrumentHandlers[SHAPE_CIRCLE] = new CircleInstrument(this);
     m_instrumentHandlers[SHAPE_SQUARE] = new SquareInstrument(this);
@@ -22,6 +24,9 @@ DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 
     mUndoStack = new QUndoStack(this);
     mUndoStack->setUndoLimit(100);
+
+    QObject::connect(mUndoStack, &QUndoStack::canUndoChanged, this, &DrawingBoard::canUndoChanged);
+    QObject::connect(mUndoStack, &QUndoStack::canRedoChanged, this, &DrawingBoard::canRedoChanged);
 }
 
 void DrawingBoard::handleMousePress(int x, int y, int button, int buttons, int modifiers) {
@@ -62,4 +67,14 @@ void DrawingBoard::paint(QPainter *painter){
 void DrawingBoard::pushUndoCommand(UndoCommand *command) {
     if (command != NULL)
         mUndoStack->push(command);
+}
+
+void DrawingBoard::undoRequest() {
+//    qDebug() << "undo count: " << mUndoStack->count();
+    mUndoStack->undo();
+}
+
+void DrawingBoard::redoRequest() {
+//    qDebug() << "redo count: " << mUndoStack->count();
+    mUndoStack->redo();
 }

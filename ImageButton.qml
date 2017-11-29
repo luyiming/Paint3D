@@ -11,10 +11,19 @@ Image {
 
     source: img
 
+    onEnabledChanged: {
+        if (enabled == false)
+            source = pressed_img
+        else
+            source = img
+    }
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+
+        enabled: root.enabled
 
         onClicked: {
             root.clicked()

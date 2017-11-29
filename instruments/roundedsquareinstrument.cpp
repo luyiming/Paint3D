@@ -16,6 +16,7 @@ void RoundedSquareInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &
         mStartPoint = mEndPoint = event->pos();
         board.setIsInPaint(true);
         mImageCopy = QImage(*board.getImage());
+        makeUndoCommand(board);
     }
 }
 
@@ -69,9 +70,11 @@ void RoundedSquareInstrument::draw(DrawingBoard &board)
     }
     painter.setBrush(brush);
 
+    painter.setOpacity(board.opaqueness() / 100.0);
+
     if(mStartPoint != mEndPoint)
     {
-        painter.drawRoundedRect(QRect(mStartPoint, mEndPoint), 5, 5);
+        painter.drawRoundedRect(QRect(mStartPoint, mEndPoint), 20, 20, Qt::RelativeSize);
     }
 
     painter.end();

@@ -28,6 +28,8 @@ public:
     Q_INVOKABLE void handleMousePress(int x, int y, int button, int buttons, int modifiers);
     Q_INVOKABLE void handleMouseRelease(int x, int y, int button, int buttons, int modifiers);
     Q_INVOKABLE void handleMouseMove(int x, int y, int button, int buttons, int modifiers);
+    Q_INVOKABLE void undoRequest();
+    Q_INVOKABLE void redoRequest();
     Q_PROPERTY(InstrumentType instrument READ instrument WRITE setInstrument)
     Q_PROPERTY(int thickness READ thickness WRITE setThickness)
     Q_PROPERTY(int opaqueness READ opaqueness WRITE setOpaqueness)
@@ -38,6 +40,13 @@ public:
     Q_PROPERTY(QString borderStyle MEMBER m_borderStyle)
     Q_PROPERTY(QString fillStyle MEMBER m_fillStyle)
 
+    Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged)
+    Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged)
+
+signals:
+    void canUndoChanged();
+    void canRedoChanged();
+
 public:
     enum InstrumentType {
         INSTRUMENT_NONE = 0,
@@ -46,6 +55,8 @@ public:
         SHAPE_CIRCLE,
         SHAPE_SQUARE,
         SHAPE_ROUNDED_SQUARE,
+        BRUSH_FILL,
+
 
         // Don't use it. (Used to know count of instruments)
         INSTRUMENTS_COUNT
@@ -70,7 +81,8 @@ public:
     QString borderStyle() { return m_borderStyle; }
     QString fillStyle() { return m_fillStyle; }
     void pushUndoCommand(UndoCommand *command);
-
+    bool canUndo() { return mUndoStack->canUndo(); }
+    bool canRedo() { return mUndoStack->canRedo(); }
 
 private:
     QImage *m_image = nullptr;

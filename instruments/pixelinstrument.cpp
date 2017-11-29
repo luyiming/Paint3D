@@ -14,6 +14,7 @@ void PixelInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
     if(event->button() == Qt::LeftButton) {
         mStartPoint = mEndPoint = event->pos();
         board.setIsInPaint(true);
+        makeUndoCommand(board);
     }
 }
 

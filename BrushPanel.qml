@@ -25,7 +25,7 @@ Rectangle {
 
     ColorDialog {
         id: colorDialog
-        showAlphaChannel: true
+//        showAlphaChannel: true
         onAccepted: {
             currentColorBlock.color = colorDialog.color
         }
@@ -98,10 +98,10 @@ Rectangle {
                 columns: 5
 
                 property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
-                property variant brushTitleName: ["马克笔(TODO)", "钢笔(TODO)", "油画笔(TODO)", "水彩笔刷(TODO)", "像素笔", "铅笔(TODO)", "橡皮擦(TODO)", "蜡笔(TODO)", "喷雾罐(TODO)", "填充(TODO)"]
+                property variant brushTitleName: ["马克笔(TODO)", "钢笔(TODO)", "油画笔(TODO)", "水彩笔刷(TODO)", "像素笔", "铅笔(TODO)", "橡皮擦(TODO)", "蜡笔(TODO)", "喷雾罐(TODO)", "填充"]
                 property variant brushType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
                                          DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                                         DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+                                         DrawingBoard.INSTRUMENT_NONE, DrawingBoard.BRUSH_FILL]
                 Repeater {
                     model: 10
 
@@ -164,6 +164,15 @@ Rectangle {
         spacing: 20
         Image {
             source: 'qrc:/icon/line.png'
+        }
+
+        Text {
+            width: 220
+            Layout.topMargin: 3
+            color: "#4d4d75"
+            font.pixelSize: 13
+            font.family: "Microsoft Yahei UI"
+            text: '笔刷颜色'
         }
 
         Rectangle {

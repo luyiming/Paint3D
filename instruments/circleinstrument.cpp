@@ -15,7 +15,7 @@ void CircleInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
         mStartPoint = mEndPoint = event->pos();
         board.setIsInPaint(true);
         mImageCopy = QImage(*board.getImage());
-//        makeUndoCommand(board);
+        makeUndoCommand(board);
     }
 }
 
@@ -68,6 +68,8 @@ void CircleInstrument::draw(DrawingBoard &board)
         brush.setStyle(Qt::SolidPattern);
     }
     painter.setBrush(brush);
+
+    painter.setOpacity(board.opaqueness() / 100.0);
 
     if(mStartPoint != mEndPoint)
     {

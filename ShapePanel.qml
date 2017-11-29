@@ -200,7 +200,6 @@ Rectangle {
                                 bigTitle.text = shapes.shapeTitleName[index]
                                 titleAnimation.start()
                                 panel.instrument = shapes.shapeType[index]
-                                panel.instrumentChanged()
                             }
                         }
                     }
@@ -235,7 +234,7 @@ Rectangle {
 
     ColorDialog {
         id: boarderColorDialog
-        showAlphaChannel: true
+//        showAlphaChannel: true
         onAccepted: {
             boarderColorID.color = boarderColorDialog.color
         }
@@ -243,7 +242,7 @@ Rectangle {
 
     ColorDialog {
         id: fillColorDialog
-        showAlphaChannel: true
+//        showAlphaChannel: true
         onAccepted: {
             fillColorID.color = fillColorDialog.color
         }

@@ -43,6 +43,14 @@ Window {
                 console.log('not implemented in header instrument selection')
             }
         }
+        onUndoClicked: {
+            drawingboard.undoRequest();
+        }
+        onRedoClicked: {
+            drawingboard.redoRequest();
+        }
+        canUndo: drawingboard.canUndo
+        canRedo: drawingboard.canRedo
     }
 
     BrushPanel {
