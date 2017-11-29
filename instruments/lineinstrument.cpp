@@ -43,7 +43,7 @@ void LineInstrument::draw(DrawingBoard &board)
     QPainter painter(board.getImage());
 
 //    painter.setPen(QPen(Qt::black));
-    painter.setPen(QPen(board.brushColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setPen(QPen(board.borderColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     if(mStartPoint != mEndPoint)
     {

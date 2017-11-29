@@ -12,6 +12,12 @@ Rectangle {
 
     property ParallelAnimation titleAnimation: titleAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
+    property int opaqueness: opaquenessSlider.value
+    property int thickness: thicknessSlider.value
+    property color borderColor: boarderColorID.color
+    property color fillColor: fillColorID.color
+    property string borderStyle: borderStyle.currentText
+    property string fillStyle: fillStyle.currentText
 
     ParallelAnimation {
         id: titleAnimation
@@ -179,7 +185,7 @@ Rectangle {
         id: boarderColorDialog
         showAlphaChannel: true
         onAccepted: {
-            boarderColorBlock.color = boarderColorDialog.color
+            boarderColorID.color = boarderColorDialog.color
         }
     }
 
@@ -187,13 +193,13 @@ Rectangle {
         id: fillColorDialog
         showAlphaChannel: true
         onAccepted: {
-            fillColorBlock.color = fillColorDialog.color
+            fillColorID.color = fillColorDialog.color
         }
     }
 
     ColumnLayout {
         anchors.bottom: panel.bottom
-        anchors.bottomMargin: 20
+        anchors.bottomMargin: 30
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 12
         Image {
@@ -217,7 +223,7 @@ Rectangle {
                 border.width: 1
                 border.color: "#d2d2d2"
                 Rectangle {
-                    id: boarderColorBlock
+                    id: boarderColorID
                     width: 30
                     height: 30
                     color: "#000000"
@@ -240,20 +246,13 @@ Rectangle {
                 }
             }
 
-            ComboBox {
+            DropDownBox {
+                id: borderStyle
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 model: [ "Solid", "None" ]
-                style: ComboBoxStyle {
-                    background: Rectangle {
-                        id: comboBack
-                        height: 50
-                        width: 150
-                        color: "#f5f5f5"
-                        border.width: 1
-                        border.color: control.hovered ? "#1760c1" : "#d2d2d2"
-                    }
-                }
+                font.pointSize: 10
+                font.family: "Microsoft Yahei UI"
             }
         }
 
@@ -266,36 +265,46 @@ Rectangle {
             text: '填充颜色'
         }
 
-        Rectangle {
-            width: 50
-            height: 50
-            color: "#f0f2f3"
-            border.width: 1
-            border.color: "#d2d2d2"
+        RowLayout{
             Rectangle {
-                id: fillColorBlock
-                width: 30
-                height: 30
-                color: "#c3c3c3"
-                anchors.centerIn: parent
+                width: 50
+                height: 50
+                color: "#f0f2f3"
+                border.width: 1
+                border.color: "#d2d2d2"
+                Rectangle {
+                    id: fillColorID
+                    width: 30
+                    height: 30
+                    color: "#c3c3c3"
+                    anchors.centerIn: parent
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(containsMouse) {
+                            parent.border.color = "#305ccc"
+                        }
+                        else {
+                            parent.border.color = "#d2d2d2"
+                        }
+                    }
+                    onClicked: {
+                        fillColorDialog.open()
+                    }
+                }
             }
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onContainsMouseChanged: {
-                    if(containsMouse) {
-                        parent.border.color = "#305ccc"
-                    }
-                    else {
-                        parent.border.color = "#d2d2d2"
-                    }
-                }
-                onClicked: {
-                    fillColorDialog.open()
-                }
+            DropDownBox {
+                id: fillStyle
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                model: [ "Solid", "None" ]
+                currentIndex: 1
+                font.pointSize: 10
+                font.family: "Microsoft Yahei UI"
             }
         }
-
 
     }
 }

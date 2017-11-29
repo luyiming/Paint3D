@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QList>
+#include <QString>
 
 class AbstractInstrument;
 
@@ -29,6 +30,11 @@ public:
     Q_PROPERTY(int thickness READ thickness WRITE setThickness)
     Q_PROPERTY(int opaqueness READ opaqueness WRITE setOpaqueness)
     Q_PROPERTY(QColor brushColor READ brushColor WRITE setBrushColor)
+
+    Q_PROPERTY(QColor borderColor MEMBER m_borderColor)
+    Q_PROPERTY(QColor fillColor MEMBER m_fillColor)
+    Q_PROPERTY(QString borderStyle MEMBER m_borderStyle)
+    Q_PROPERTY(QString fillStyle MEMBER m_fillStyle)
 
 public:
     enum InstrumentType {
@@ -54,12 +60,20 @@ public:
     void setOpaqueness(int opaqueness) { m_opaqueness = opaqueness; qDebug() << opaqueness; }
     QColor brushColor() { return m_brushColor; }
     void setBrushColor(QColor brushColor) { m_brushColor = brushColor; qDebug() << brushColor; }
+    QColor borderColor() { return m_borderColor; }
+    QColor fillColor() { return m_fillColor; }
+    QString borderStyle() { return m_borderStyle; }
+    QString fillStyle() { return m_fillStyle; }
 
 private:
     QImage *m_image = nullptr;
     bool m_isInPaint = false;
+
     int m_thickness = 1;
     int m_opaqueness = 100; // 1~100
+    QColor m_borderColor, m_fillColor;
+    QString m_borderStyle, m_fillStyle;
+
     QColor m_brushColor = Qt::black;
     QVector<AbstractInstrument*> m_instrumentHandlers;
     InstrumentType m_instrument = INSTRUMENT_NONE;

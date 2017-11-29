@@ -10,5 +10,6 @@
         <file>BlueSlider.qml</file>
         <file>SliderWithBox.qml</file>
         <file>LineAttributePanel.qml</file>
+        <file>DropDownBox.qml</file>
     </qresource>
 </RCC>

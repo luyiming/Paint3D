@@ -23,11 +23,23 @@ Window {
             menuShowAnimation.start()
         }
         onCurrentHeaderChanged: {
-            if (currentHeader === 1)
+            if (currentHeader === 1) {
                 drawingboard.instrument = brushPanel.instrument
-            else if (currentHeader === 2)
+                drawingboard.brushColor = brushPanel.brushColor
+                drawingboard.thickness = brushPanel.thickness
+                drawingboard.opaqueness = brushPanel.opaqueness
+            }
+            else if (currentHeader === 2) {
                 drawingboard.instrument = shapePanel.instrument
+                drawingboard.borderColor = shapePanel.borderColor
+                drawingboard.fillColor = shapePanel.fillColor
+                drawingboard.borderStyle = shapePanel.borderStyle
+                drawingboard.fillStyle = shapePanel.fillStyle
+                drawingboard.thickness = shapePanel.thickness
+                drawingboard.opaqueness = shapePanel.opaqueness
+            }
             else {
+                drawingboard.instrument = DrawingBoard.INSTRUMENT_NONE
                 console.log('not implemented in header instrument selection')
             }
         }
@@ -70,6 +82,12 @@ Window {
             }
         }
         onInstrumentChanged: drawingboard.instrument = instrument
+        onThicknessChanged: drawingboard.thickness = thickness
+        onOpaquenessChanged: drawingboard.opaqueness = opaqueness
+        onBorderColorChanged: drawingboard.borderColor = borderColor
+        onBorderStyleChanged: drawingboard.borderStyle = borderStyle
+        onFillColorChanged: drawingboard.fillColor = fillColor
+        onFillStyleChanged: drawingboard.fillStyle = fillStyle
     }
 
     Rectangle {
