@@ -50,14 +50,6 @@ Rectangle {
                     }
                 }
             }
-
-
-            Image {
-                source: 'qrc:/icon/line.png'
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: sideBar.bottom
-                anchors.bottomMargin: 20
-            }
         }
 
         Rectangle {

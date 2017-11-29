@@ -40,17 +40,6 @@ ComboBox {
         }
     }
 
-    contentItem: Text {
-        anchors.leftMargin: 0
-        anchors.rightMargin: control.indicator.width + control.spacing
-
-        text: control.displayText
-        font: control.font
-        color: "#4d4d75"
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-    }
-
     background: Rectangle {
         implicitWidth: 150
         implicitHeight: 50

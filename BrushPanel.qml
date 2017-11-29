@@ -62,7 +62,7 @@ Rectangle {
             to: 0
         }
         NumberAnimation {
-            target: lines_and_curves
+            target: brushes
             property: "opacity"
             duration: 250
             easing.type: Easing.InOutQuad

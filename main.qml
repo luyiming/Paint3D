@@ -8,9 +8,9 @@ import luyiming 1.0
 Window {
     id: root
     visible: true
-    width: 1400
+    width: 1200
     minimumWidth: 1000
-    height: 900
+    height: 800
     minimumHeight: 700
     title: qsTr("画图")
 
