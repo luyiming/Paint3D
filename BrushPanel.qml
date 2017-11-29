@@ -16,6 +16,13 @@ Rectangle {
     property int opaqueness: opaquenessSlider.value
     property color brushColor: currentColorBlock.color
 
+    onVisibleChanged: {
+        if (visible) {
+            titleAnimation.start()
+            popupAnimation.start()
+        }
+    }
+
     ColorDialog {
         id: colorDialog
         showAlphaChannel: true
@@ -44,6 +51,26 @@ Rectangle {
         }
     }
 
+    ParallelAnimation {
+        id: popupAnimation
+        NumberAnimation {
+            target: brushes
+            property: "y"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: 10
+            to: 0
+        }
+        NumberAnimation {
+            target: lines_and_curves
+            property: "opacity"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: 0
+            to: 1
+        }
+    }
+
     ColumnLayout {
         anchors.top: panel.top
         anchors.topMargin: 12
@@ -61,45 +88,49 @@ Rectangle {
 
         ExclusiveGroup { id: shapeGroup }
 
-        Grid {
-            id: brushes
+        Item {
             width: 220
-            spacing: 5
-            columns: 5
+            height: 85
+            Grid {
+                id: brushes
+                width: 220
+                spacing: 5
+                columns: 5
 
-            property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
-            property variant brushTitleName: ["马克笔", "钢笔", "油画笔", "水彩笔刷", "像素笔", "铅笔", "橡皮擦", "蜡笔", "喷雾罐", "填充"]
-            property variant brushType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                                     DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                                     DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
-            Repeater {
-                model: 10
+                property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
+                property variant brushTitleName: ["马克笔(TODO)", "钢笔(TODO)", "油画笔(TODO)", "水彩笔刷(TODO)", "像素笔", "铅笔(TODO)", "橡皮擦(TODO)", "蜡笔(TODO)", "喷雾罐(TODO)", "填充(TODO)"]
+                property variant brushType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                                         DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                                         DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+                Repeater {
+                    model: 10
 
-                CheckableButton {
-                    width: 40
-                    height: 40
+                    CheckableButton {
+                        width: 40
+                        height: 40
 
-                    exclusiveGroup: shapeGroup
+                        exclusiveGroup: shapeGroup
 
-                    source: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '.png'
+                        source: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '.png'
 
-                    on_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
-                    on_hover_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
-                    on_pressed_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
-                    off_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '.png'
-                    off_hover_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-hover.png'
-                    off_pressed_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-hover.png'
+                        on_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
+                        on_hover_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
+                        on_pressed_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-on.png'
+                        off_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '.png'
+                        off_hover_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-hover.png'
+                        off_pressed_img: 'qrc:/icon/brush/' + brushes.brushIconName[index] + '-hover.png'
 
-                    onCheckedChanged: {
-                        if (checked && bigTitle.text !== brushes.brushTitleName[index]) {
-                            bigTitle.text = brushes.brushTitleName[index]
-                            titleAnimation.start()
-                            panel.instrument = brushes.brushType[index]
+                        onCheckedChanged: {
+                            if (checked && bigTitle.text !== brushes.brushTitleName[index]) {
+                                bigTitle.text = brushes.brushTitleName[index]
+                                titleAnimation.start()
+                                panel.instrument = brushes.brushType[index]
+                            }
                         }
                     }
                 }
-            }
 
+            }
         }
 
         SliderWithBox {

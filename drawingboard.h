@@ -41,6 +41,7 @@ public:
         INSTRUMENT_NONE = 0,
         BRUSH_PIXEL,
         SHAPE_LINE,
+        SHAPE_CIRCLE,
 
         // Don't use it. (Used to know count of instruments)
         INSTRUMENTS_COUNT

@@ -7,12 +7,14 @@
 #include <QDebug>
 #include "instruments/pixelinstrument.h"
 #include "instruments/lineinstrument.h"
+#include "instruments/circleinstrument.h"
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
     m_instrumentHandlers.fill(NULL, (int)INSTRUMENTS_COUNT);
     m_instrumentHandlers[BRUSH_PIXEL] = new PixelInstrument(this);
     m_instrumentHandlers[SHAPE_LINE] = new LineInstrument(this);
+    m_instrumentHandlers[SHAPE_CIRCLE] = new CircleInstrument(this);
 }
 
 void DrawingBoard::handleMousePress(int x, int y, int button, int buttons, int modifiers) {

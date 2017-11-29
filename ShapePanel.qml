@@ -11,6 +11,7 @@ Rectangle {
     color: "#f0f2f3"
 
     property ParallelAnimation titleAnimation: titleAnimation
+    property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
     property int opaqueness: opaquenessSlider.value
     property int thickness: thicknessSlider.value
@@ -18,6 +19,13 @@ Rectangle {
     property color fillColor: fillColorID.color
     property string borderStyle: borderStyle.currentText
     property string fillStyle: fillStyle.currentText
+
+    onVisibleChanged: {
+        if (visible) {
+            titleAnimation.start()
+            popupAnimation.start()
+        }
+    }
 
     ParallelAnimation {
         id: titleAnimation
@@ -31,6 +39,42 @@ Rectangle {
         }
         NumberAnimation {
             target: bigTitle
+            property: "opacity"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: 0
+            to: 1
+        }
+    }
+
+    ParallelAnimation {
+        id: popupAnimation
+        NumberAnimation {
+            target: lines_and_curves
+            property: "y"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: 10
+            to: 0
+        }
+        NumberAnimation {
+            target: lines_and_curves
+            property: "opacity"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: 0
+            to: 1
+        }
+        NumberAnimation {
+            target: shapes
+            property: "y"
+            duration: 250
+            easing.type: Easing.InOutQuad
+            from: 10
+            to: 0
+        }
+        NumberAnimation {
+            target: shapes
             property: "opacity"
             duration: 250
             easing.type: Easing.InOutQuad
@@ -65,37 +109,41 @@ Rectangle {
             text: '直线和曲线'
         }
 
-        Row {
-            id: lines_and_curves
+        Item {
             width: 220
+            height: 40
+            Row {
+                id: lines_and_curves
+                width: 220
 
-            property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
-            property variant shapeTitleName: ["直线", "两点曲线", "三点曲线", "四点曲线"]
-            property variant shapeType: [DrawingBoard.SHAPE_LINE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+                property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
+                property variant shapeTitleName: ["直线", "两点曲线", "三点曲线", "四点曲线"]
+                property variant shapeType: [DrawingBoard.SHAPE_LINE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
 
-            Repeater {
-                model: 4
+                Repeater {
+                    model: 4
 
-                CheckableButton {
-                    width: 40
-                    height: 40
+                    CheckableButton {
+                        width: 40
+                        height: 40
 
-                    exclusiveGroup: shapeGroup
+                        exclusiveGroup: shapeGroup
 
-                    source: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '.png'
+                        source: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '.png'
 
-                    on_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
-                    on_hover_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
-                    on_pressed_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
-                    off_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '.png'
-                    off_hover_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
-                    off_pressed_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-pressed.png'
+                        on_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                        on_hover_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                        on_pressed_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                        off_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '.png'
+                        off_hover_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-on.png'
+                        off_pressed_img: 'qrc:/icon/2dshape/' + lines_and_curves.shapeIconName[index] + '-pressed.png'
 
-                    onCheckedChanged: {
-                        if (checked && bigTitle.text !== lines_and_curves.shapeTitleName[index]) {
-                            bigTitle.text = lines_and_curves.shapeTitleName[index]
-                            titleAnimation.start()
-                            panel.instrument = lines_and_curves.shapeType[index]
+                        onCheckedChanged: {
+                            if (checked && bigTitle.text !== lines_and_curves.shapeTitleName[index]) {
+                                bigTitle.text = lines_and_curves.shapeTitleName[index]
+                                titleAnimation.start()
+                                panel.instrument = lines_and_curves.shapeType[index]
+                            }
                         }
                     }
                 }
@@ -110,46 +158,50 @@ Rectangle {
             text: '2D 形状'
         }
 
-        Grid {
-            id: shapes
+        Item {
             width: 220
-            columns: 5
-            spacing: 5
+            height: 130
+            Grid {
+                id: shapes
+                width: 220
+                columns: 5
+                spacing: 5
 
-            property variant shapeIconName: ["circle", "capsule", "square", "rounded-square", "triangle",
-                "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
-                "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
-            property variant shapeTitleName: ["圆形", "胶囊形", "矩形", "圆角矩形", "三角形",
-                "五边形", "六边形", "菱形", "直角三角形", "arrow",
-                "pointed-arrow", "圆弧", "五角星", "六角星", "四角星"]
-            property variant shapeType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+                property variant shapeIconName: ["circle", "capsule", "square", "rounded-square", "triangle",
+                    "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
+                    "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
+                property variant shapeTitleName: ["圆形", "胶囊形(TODO)", "矩形(TODO)", "圆角矩形(TODO)", "三角形(TODO)",
+                    "五边形(TODO)", "六边形(TODO)", "菱形(TODO)", "直角三角形(TODO)", "arrow(TODO)",
+                    "pointed-arrow(TODO)", "圆弧(TODO)", "五角星(TODO)", "六角星(TODO)", "四角星(TODO)"]
+                property variant shapeType: [DrawingBoard.SHAPE_CIRCLE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                    DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                    DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
 
-            Repeater {
-                model: 15
+                Repeater {
+                    model: 15
 
-                CheckableButton {
-                    width: 40
-                    height: 40
+                    CheckableButton {
+                        width: 40
+                        height: 40
 
-                    exclusiveGroup: shapeGroup
+                        exclusiveGroup: shapeGroup
 
-                    source: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
+                        source: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
 
-                    on_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                    on_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                    on_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                    off_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
-                    off_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                    off_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-pressed.png'
+                        on_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                        on_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                        on_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                        off_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
+                        off_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
+                        off_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-pressed.png'
 
-                    onCheckedChanged: {
-                        if (checked && bigTitle.text !== shapes.shapeTitleName[index]) {
-                            bigTitle.text = shapes.shapeTitleName[index]
-                            titleAnimation.start()
-                            panel.instrument = shapes.shapeType[index]
-                            panel.instrumentChanged()
+                        onCheckedChanged: {
+                            if (checked && bigTitle.text !== shapes.shapeTitleName[index]) {
+                                bigTitle.text = shapes.shapeTitleName[index]
+                                titleAnimation.start()
+                                panel.instrument = shapes.shapeType[index]
+                                panel.instrumentChanged()
+                            }
                         }
                     }
                 }

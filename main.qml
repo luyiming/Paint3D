@@ -55,11 +55,6 @@ Window {
         anchors.right: root.right
         anchors.left: board.right
 
-        onVisibleChanged: {
-            if (visible) {
-                titleAnimation.start()
-            }
-        }
         onInstrumentChanged: drawingboard.instrument = instrument
         onThicknessChanged: drawingboard.thickness = thickness
         onOpaquenessChanged: drawingboard.opaqueness = opaqueness
@@ -76,11 +71,6 @@ Window {
         anchors.right: root.right
         anchors.left: board.right
 
-        onVisibleChanged: {
-            if (visible) {
-                titleAnimation.start()
-            }
-        }
         onInstrumentChanged: drawingboard.instrument = instrument
         onThicknessChanged: drawingboard.thickness = thickness
         onOpaquenessChanged: drawingboard.opaqueness = opaqueness
