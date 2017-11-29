@@ -14,9 +14,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     drawingboard.cpp \
-    drawingboard.cpp \
-    main.cpp \
-    painter/painter.cpp \
     instruments/abstractinstrument.cpp \
     instruments/pixelinstrument.cpp \
     instruments/lineinstrument.cpp \
@@ -25,7 +22,8 @@ SOURCES += main.cpp \
     instruments/roundedsquareinstrument.cpp \
     undocommand.cpp \
     instruments/fillinstrument.cpp \
-    instruments/eraserinstrument.cpp
+    instruments/eraserinstrument.cpp \
+    core/painter.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -45,8 +43,6 @@ DISTFILES +=
 
 HEADERS += \
     drawingboard.h \
-    drawingboard.h \
-    painter/painter.h \
     instruments/abstractinstrument.h \
     instruments/pixelinstrument.h \
     instruments/lineinstrument.h \
@@ -55,4 +51,5 @@ HEADERS += \
     instruments/roundedsquareinstrument.h \
     undocommand.h \
     instruments/fillinstrument.h \
-    instruments/eraserinstrument.h
+    instruments/eraserinstrument.h \
+    core/painter.h

@@ -1,5 +1,6 @@
 #include "lineinstrument.h"
 #include "../drawingboard.h"
+#include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
@@ -42,15 +43,15 @@ void LineInstrument::draw(DrawingBoard &board)
 {
     board.setImage(mImageCopy);
     QPainter painter(board.getImage());
-
-//    painter.setPen(QPen(Qt::black));
     painter.setPen(QPen(board.borderColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-
     painter.setOpacity(board.opaqueness() / 100.0);
+
+    CorePainter::Painter mypainter(board.getImage());
 
     if(mStartPoint != mEndPoint)
     {
-        painter.drawLine(mStartPoint, mEndPoint);
+//        painter.drawLine(mStartPoint, mEndPoint);
+        mypainter.drawLine(mStartPoint, mEndPoint);
     }
 
     if(mStartPoint == mEndPoint)

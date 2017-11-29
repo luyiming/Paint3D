@@ -23,6 +23,7 @@ void FillInstrument::mouseMoveEvent(QMouseEvent *, DrawingBoard &)
 
 void FillInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 {
+    Q_UNUSED(event);
     if(board.isInPaint())
     {
         draw(board);
@@ -32,7 +33,7 @@ void FillInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 
 void FillInstrument::draw(DrawingBoard &board)
 {
-    QColor fillColor = board.fillColor();
+    QColor fillColor = board.brushColor();
 
     QRgb pixel(board.getImage()->pixel(mStartPoint));
     QColor oldColor(pixel);
