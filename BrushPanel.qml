@@ -98,9 +98,9 @@ Rectangle {
                 columns: 5
 
                 property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
-                property variant brushTitleName: ["马克笔(TODO)", "钢笔(TODO)", "油画笔(TODO)", "水彩笔刷(TODO)", "像素笔", "铅笔(TODO)", "橡皮擦(TODO)", "蜡笔(TODO)", "喷雾罐(TODO)", "填充"]
+                property variant brushTitleName: ["马克笔(TODO)", "钢笔(TODO)", "油画笔(TODO)", "水彩笔刷(TODO)", "像素笔", "铅笔(TODO)", "橡皮擦", "蜡笔(TODO)", "喷雾罐(TODO)", "填充"]
                 property variant brushType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                                         DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
+                                         DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.BRUSH_ERASER, DrawingBoard.INSTRUMENT_NONE,
                                          DrawingBoard.INSTRUMENT_NONE, DrawingBoard.BRUSH_FILL]
                 Repeater {
                     model: 10

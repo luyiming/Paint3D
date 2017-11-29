@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     instruments/squareinstrument.cpp \
     instruments/roundedsquareinstrument.cpp \
     undocommand.cpp \
-    instruments/fillinstrument.cpp
+    instruments/fillinstrument.cpp \
+    instruments/eraserinstrument.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -53,4 +54,5 @@ HEADERS += \
     instruments/squareinstrument.h \
     instruments/roundedsquareinstrument.h \
     undocommand.h \
-    instruments/fillinstrument.h
+    instruments/fillinstrument.h \
+    instruments/eraserinstrument.h

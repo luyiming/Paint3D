@@ -11,12 +11,14 @@
 #include "instruments/squareinstrument.h"
 #include "instruments/roundedsquareinstrument.h"
 #include "instruments/fillinstrument.h"
+#include "instruments/eraserinstrument.h"
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
     m_instrumentHandlers.fill(NULL, (int)INSTRUMENTS_COUNT);
     m_instrumentHandlers[BRUSH_PIXEL] = new PixelInstrument(this);
     m_instrumentHandlers[BRUSH_FILL] = new FillInstrument(this);
+    m_instrumentHandlers[BRUSH_ERASER] = new EraserInstrument(this);
     m_instrumentHandlers[SHAPE_LINE] = new LineInstrument(this);
     m_instrumentHandlers[SHAPE_CIRCLE] = new CircleInstrument(this);
     m_instrumentHandlers[SHAPE_SQUARE] = new SquareInstrument(this);

@@ -56,6 +56,7 @@ public:
         SHAPE_SQUARE,
         SHAPE_ROUNDED_SQUARE,
         BRUSH_FILL,
+        BRUSH_ERASER,
 
 
         // Don't use it. (Used to know count of instruments)
