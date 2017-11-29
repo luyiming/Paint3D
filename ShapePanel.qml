@@ -117,7 +117,7 @@ Rectangle {
                 width: 220
 
                 property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
-                property variant shapeTitleName: ["直线", "两点曲线", "三点曲线", "四点曲线"]
+                property variant shapeTitleName: ["直线", "两点曲线(TODO)", "三点曲线(TODO)", "四点曲线(TODO)"]
                 property variant shapeType: [DrawingBoard.SHAPE_LINE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
 
                 Repeater {

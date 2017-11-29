@@ -15,7 +15,6 @@ public:
     void mouseMoveEvent(QMouseEvent *event, DrawingBoard &board);
     void mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board);
     void draw(DrawingBoard &board);
-
 };
 
 #endif // PIXELINSTRUMENT_H
