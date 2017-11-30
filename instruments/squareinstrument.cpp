@@ -1,5 +1,6 @@
 #include "squareinstrument.h"
 #include "../drawingboard.h"
+#include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
@@ -74,7 +75,14 @@ void SquareInstrument::draw(DrawingBoard &board)
 
     if(mStartPoint != mEndPoint)
     {
-        painter.drawRect(QRect(mStartPoint, mEndPoint));
+        CorePainter::Painter mypainter(board.getImage());
+        int x1 = mStartPoint.x() < mEndPoint.x() ? mStartPoint.x() : mEndPoint.x();
+        int y1 = mStartPoint.y() < mEndPoint.y() ? mStartPoint.y() : mEndPoint.y();
+        int width = abs(mStartPoint.x() - mEndPoint.x());
+        int height = abs(mStartPoint.y() - mEndPoint.y());
+        mypainter.drawSquare(x1, y1, width, height, board.thickness(), board.opaqueness() / 100.0, board.borderColor(), board.fillColor(),
+                           board.borderStyle() != "None", board.fillStyle() != "None");
+//        painter.drawRect(QRect(mStartPoint, mEndPoint));
     }
 
     painter.end();

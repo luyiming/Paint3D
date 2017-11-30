@@ -10,20 +10,23 @@ Painter::Painter(QImage *image, QObject *parent) : QObject(parent)
 
 void Painter::drawPixel(int x, int y, const QColor & color)
 {
-    if(x >= 0 && y >= 0 && x < mImage->width() && y < mImage->height())
-        mImage->setPixel(x, y, color.rgb());
+    if(x >= 0 && y >= 0 && x < mImage->width() && y < mImage->height()) {
+        QRgb *rowData = (QRgb*)mImage->scanLine(y);
+        rowData[x] = color.rgb();
+//        mImage->setPixel(x, y, color.rgb());
+    }
 }
 
-void Painter::drawLine(const QPoint & p1, const QPoint & p2, QColor color, int width)
+void Painter::drawLine(const QPoint & p1, const QPoint & p2, int width, float opacity, QColor color)
 {
 //    drawLineBresenham(p1.x(), p1.y(), p2.x(), p2.y(), color);
-    lineSDFAABB(p1.x(), p1.y(), p2.x(), p2.y(), width, color);
+    color.setAlphaF(opacity);
+    drawLineSDFAABB(p1.x(), p1.y(), p2.x(), p2.y(), width, color);
 }
 
-void Painter::drawPoint(const QPoint & position, int width)
+void Painter::drawPoint(const QPoint & position, int width, float opacity, QColor color)
 {
-    Q_UNUSED(position);
-    Q_UNUSED(width);
+    drawCircle(position.x(), position.y(), width / 2.0, 0, opacity, color, color, false, true);
 }
 
 void Painter::drawLineDDA(int x1, int y1, int x2, int y2, QColor color) {
@@ -75,6 +78,63 @@ void Painter::drawLineBresenham(int x1, int y1, int x2, int y2, QColor color) {
     }
 }
 
+void Painter::drawSquare(int x, int y, int width, int height, int thickness, float opacity, QColor fg, QColor bg, bool usefg, bool usebg) {
+    float w = width / 2.0;
+    float h = height / 2.0;
+    float ax = x + w;
+    float ay = y + h;
+    for (int px = x - 2; px <= x + width + 2; px++)
+        for (int py = y - 2; py <= y + height + 2; py++) {
+            if(px < 0 || py < 0 || px >= mImage->width() || py >= mImage->height())
+                continue;
+            QRgb *rowData = (QRgb*)mImage->scanLine(py);
+            QRgb pixelData = rowData[px];
+//            QRgb pixelData = mImage->pixel(px, py);
+            QColor color = alphablend(squareSDF(px, py, ax, ay, w, h), thickness / 2.0, 0.5, opacity, fg.rgba(), bg.rgba(), pixelData, usefg, usebg);
+            drawPixel(px, py, color);
+        }
+}
+
+void Painter::drawRoundedSquare(int x, int y, int width, int height, int radius, int thickness, float opacity, QColor fg, QColor bg, bool usefg, bool usebg) {
+    float w = width / 2.0;
+    float h = height / 2.0;
+    float ax = x + w;
+    float ay = y + h;
+    for (int px = x - 2; px <= x + width + 2; px++)
+        for (int py = y - 2; py <= y + height + 2; py++) {
+            if(px < 0 || py < 0 || px >= mImage->width() || py >= mImage->height())
+                continue;
+            QRgb *rowData = (QRgb*)mImage->scanLine(py);
+            QRgb pixelData = rowData[px];
+            QColor color = alphablend(roundedSquareSDF(px, py, ax, ay, w, h, radius), thickness / 2.0, 0.5, opacity, fg.rgba(), bg.rgba(), pixelData, usefg, usebg);
+            drawPixel(px, py, color);
+        }
+}
+
+void Painter::drawCircle(int x, int y, int radius, int thickness, float opacity, QColor fg, QColor bg, bool usefg, bool usebg) {
+    for (int px = x - radius - 2; px <= x + radius + 2; px++)
+        for (int py = y - radius - 2; py <= y + radius + 2; py++) {
+            if(px < 0 || py < 0 || px >= mImage->width() || py >= mImage->height())
+                continue;
+            QRgb *rowData = (QRgb*)mImage->scanLine(py);
+            QRgb pixelData = rowData[px];
+            QColor color = alphablend(circleSDF(px, py, x, y, radius), thickness / 2.0, 0.5, opacity, fg.rgba(), bg.rgba(), pixelData, usefg, usebg);
+            drawPixel(px, py, color);
+        }
+}
+
+void Painter::drawEllipse(int x, int y, int rx, int ry, int thickness, float opacity, QColor fg, QColor bg, bool usefg, bool usebg) {
+    for (int px = x - rx - 2; px <= x + rx + 2; px++)
+        for (int py = y - ry - 2; py <= y + ry + 2; py++) {
+            if(px < 0 || py < 0 || px >= mImage->width() || py >= mImage->height())
+                continue;
+            QRgb *rowData = (QRgb*)mImage->scanLine(py);
+            QRgb pixelData = rowData[px];
+            QColor color = alphablend(ellipseSDF(px, py, x, y, rx, ry), thickness / 2.0, 0.5, opacity, fg.rgba(), bg.rgba(), pixelData, usefg, usebg);
+            drawPixel(px, py, color);
+        }
+}
+
 void Painter::alphablend(int x, int y, float alpha, QColor color) {
     if(x < 0 || y < 0 || x >= mImage->width() || y >= mImage->height())
         return;
@@ -86,6 +146,20 @@ void Painter::alphablend(int x, int y, float alpha, QColor color) {
     drawPixel(x, y, color);
 }
 
+QColor Painter::alphablend(float d, float w, float a, float o, QRgb fg, QRgb bg, QRgb color, bool usefg, bool usebg) {
+    float bg_alpha = 0.0, fg_alpha = 0.0;
+    if (usebg)
+        bg_alpha = fmaxf(fminf(- 0.5 * (d + w - a) / a, 1.0f), 0.0f) * o;
+    if (usefg)
+        fg_alpha = d > 0 ? fmaxf(fminf(- 0.5 * (d - w - a) / a, 1.0f), 0.0f) * o : fmaxf(fminf(0.5 * (d + w + a) / a, 1.0f), 0.0f) * o;
+    QColor result;
+    result.setRed(qRed(fg) * fg_alpha + qRed(bg) * bg_alpha + qRed(color) * (1 - fg_alpha - bg_alpha));
+    result.setGreen(qGreen(fg) * fg_alpha + qGreen(bg) * bg_alpha + qGreen(color) * (1 - fg_alpha - bg_alpha));
+    result.setBlue(qBlue(fg) * fg_alpha + qBlue(bg) * bg_alpha + qBlue(color) * (1 - fg_alpha - bg_alpha));
+    result.setAlphaF(1.0);
+    return result;
+}
+
 float Painter::capsuleSDF(float px, float py, float ax, float ay, float bx, float by, float r) {
     float pax = px - ax, pay = py - ay, bax = bx - ax, bay = by - ay;
     float h = fmaxf(fminf((pax * bax + pay * bay) / (bax * bax + bay * bay), 1.0f), 0.0f);
@@ -93,18 +167,34 @@ float Painter::capsuleSDF(float px, float py, float ax, float ay, float bx, floa
     return sqrtf(dx * dx + dy * dy) - r;
 }
 
-float Painter::circleSDF(float px, float py,float x, float y, float r, float width) {
-    width /= 2;
+float Painter::circleSDF(float px, float py,float x, float y, float r) {
     float pr = sqrtf((px - x) * (px - x) + (py - y) * (py - y));
-    if (pr > r + width)
-        return pr - r + width;
-    else if (pr < r - width)
-        return r - width - pr;
-    else
-        return fminf(pr - r + width, r + width - pr);
+    return pr - r;
 }
 
-void Painter::lineSDFAABB(float ax, float ay, float bx, float by, float r, QColor color) {
+float Painter::ellipseSDF(float px, float py, float ax, float ay, float rx, float ry)
+{
+    float rx2 = rx * rx;
+    float ry2 = ry * ry;
+    return (ry2 * (px - ax) * (px - ax) + rx2 * (py - ay) * (py - ay) - rx2 * ry2) / (rx2 * ry2);
+}
+
+float Painter::squareSDF(float px, float py, float ax, float ay, float width, float height)
+{
+    float dx = abs(px - ax) - width;
+    float dy = abs(py - ay) - height;
+//    return fmaxf(dx, dy);
+    return fminf(fmaxf(dx, dy), 0.0) + sqrtf(fmaxf(dx, 0.0) * fmaxf(dx, 0.0) + fmaxf(dy, 0.0) * fmaxf(dy, 0.0));
+}
+
+float Painter::roundedSquareSDF(float px, float py, float ax, float ay, float width, float height, float r)
+{
+    float dx = abs(px - ax) - width;
+    float dy = abs(py - ay) - height;
+    return fminf(fmaxf(dx, dy), 0.0) + sqrtf(fmaxf(dx, 0.0) * fmaxf(dx, 0.0) + fmaxf(dy, 0.0) * fmaxf(dy, 0.0)) - r;
+}
+
+void Painter::drawLineSDFAABB(float ax, float ay, float bx, float by, float r, QColor color) {
     int x0 = (int)floorf(fminf(ax, bx) - r);
     int x1 = (int) ceilf(fmaxf(ax, bx) + r);
     int y0 = (int)floorf(fminf(ay, by) - r);
@@ -113,16 +203,6 @@ void Painter::lineSDFAABB(float ax, float ay, float bx, float by, float r, QColo
     for (int y = y0; y <= y1; y++)
         for (int x = x0; x <= x1; x++)
             alphablend(x, y, fmaxf(fminf(0.5f - capsuleSDF(x, y, ax, ay, bx, by, r / 2), 1.0f), 0.0f), color);
-}
-
-void Painter::circleSDFAABB(float ax, float ay, float radius, float width, QColor color) {
-    int x0 = (int)floorf(ax - radius - width);
-    int y0 = (int)floorf(ay - radius - width);
-    int x1 = (int) ceilf(ax + radius + width);
-    int y1 = (int) ceilf(ay + radius + width);
-    for (int y = y0; y <= y1; y++)
-        for (int x = x0; x <= x1; x++)
-            alphablend(x, y, fmaxf(fminf(0.5f - circleSDF(x, y, ax, ay, radius, width), 1.0f), 0.0f), color);
 }
 
 void Painter::drawCircleBresenham(int x1, int y1, int r, QColor color) {

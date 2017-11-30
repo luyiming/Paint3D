@@ -1,5 +1,6 @@
 #include "roundedsquareinstrument.h"
 #include "../drawingboard.h"
+#include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
@@ -72,9 +73,18 @@ void RoundedSquareInstrument::draw(DrawingBoard &board)
 
     painter.setOpacity(board.opaqueness() / 100.0);
 
+    painter.setRenderHint(QPainter::Antialiasing);
+
     if(mStartPoint != mEndPoint)
     {
-        painter.drawRoundedRect(QRect(mStartPoint, mEndPoint), 20, 20, Qt::RelativeSize);
+//        CorePainter::Painter painter(board.getImage());
+        int x1 = mStartPoint.x() < mEndPoint.x() ? mStartPoint.x() : mEndPoint.x();
+        int y1 = mStartPoint.y() < mEndPoint.y() ? mStartPoint.y() : mEndPoint.y();
+        int width = abs(mStartPoint.x() - mEndPoint.x());
+        int height = abs(mStartPoint.y() - mEndPoint.y());
+//        painter.drawSquare(x1, y1, width, height, board.thickness(), board.opaqueness() / 100.0, board.borderColor(), board.fillColor(),
+//                           board.borderStyle() != "None", board.fillStyle() != "None");
+        painter.drawRoundedRect(x1, y1, width, height, 20, 20, Qt::RelativeSize);
     }
 
     painter.end();

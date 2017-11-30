@@ -51,9 +51,7 @@ void LineInstrument::draw(DrawingBoard &board)
     if(mStartPoint != mEndPoint)
     {
 //        painter.drawLine(mStartPoint, mEndPoint);
-        QColor color = board.borderColor();
-        color.setAlphaF(board.opaqueness() / 100.0);
-        mypainter.drawLine(mStartPoint, mEndPoint, color, board.thickness());
+        mypainter.drawLine(mStartPoint, mEndPoint, board.thickness(), board.opaqueness() / 100.0, board.borderColor());
     }
 
     if(mStartPoint == mEndPoint)

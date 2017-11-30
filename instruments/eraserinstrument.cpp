@@ -1,6 +1,6 @@
 #include "eraserinstrument.h"
 #include "../drawingboard.h"
-
+#include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
@@ -43,13 +43,17 @@ void EraserInstrument::draw(DrawingBoard &board)
 {
     QPainter painter(board.getImage());
     painter.setPen(QPen(Qt::white, board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setRenderHint(QPainter::Antialiasing);
 
+    CorePainter::Painter mypainter(board.getImage());
     if(mStartPoint != mEndPoint) {
-        painter.drawLine(mStartPoint, mEndPoint);
+//        painter.drawLine(mStartPoint, mEndPoint);
+        mypainter.drawLine(mStartPoint, mEndPoint, board.thickness(), board.opaqueness() / 100.0, Qt::white);
     }
 
     if(mStartPoint == mEndPoint) {
-        painter.drawPoint(mStartPoint);
+//        painter.drawPoint(mStartPoint);
+        mypainter.drawPoint(mEndPoint, board.thickness(), board.opaqueness() / 100.0, Qt::white);
     }
 
     painter.end();

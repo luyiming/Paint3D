@@ -1,5 +1,6 @@
 #include "pixelinstrument.h"
 #include "../drawingboard.h"
+#include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
@@ -42,14 +43,21 @@ void PixelInstrument::draw(DrawingBoard &board)
     painter.setPen(QPen(board.brushColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setOpacity(board.opaqueness() / 100.0);
 
+    if (board.thickness() > 5)
+        painter.setRenderHint(QPainter::Antialiasing);
+
+    CorePainter::Painter mypainter(board.getImage());
+
     if(mStartPoint != mEndPoint)
     {
-        painter.drawLine(mStartPoint, mEndPoint);
+//        painter.drawLine(mStartPoint, mEndPoint);
+        mypainter.drawLine(mStartPoint, mEndPoint, board.thickness(), board.opaqueness() / 100.0, board.borderColor());
     }
 
     if(mStartPoint == mEndPoint)
     {
-        painter.drawPoint(mStartPoint);
+//        painter.drawPoint(mStartPoint);
+        mypainter.drawPoint(mEndPoint, board.thickness(), board.opaqueness() / 100.0, board.brushColor());
     }
 
     painter.end();

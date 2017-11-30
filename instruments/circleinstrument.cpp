@@ -1,5 +1,6 @@
 #include "circleinstrument.h"
 #include "../drawingboard.h"
+#include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
@@ -70,15 +71,17 @@ void CircleInstrument::draw(DrawingBoard &board)
     painter.setBrush(brush);
 
     painter.setOpacity(board.opaqueness() / 100.0);
-
+    painter.setRenderHint(QPainter::Antialiasing);
     if(mStartPoint != mEndPoint)
     {
         painter.drawEllipse(QRect(mStartPoint, mEndPoint));
-    }
-
-    if(mStartPoint == mEndPoint)
-    {
-        painter.drawPoint(mStartPoint);
+//        CorePainter::Painter painter(board.getImage());
+//        int x1 = mStartPoint.x() < mEndPoint.x() ? mStartPoint.x() : mEndPoint.x();
+//        int y1 = mStartPoint.y() < mEndPoint.y() ? mStartPoint.y() : mEndPoint.y();
+//        int width = abs(mStartPoint.x() - mEndPoint.x());
+//        int height = abs(mStartPoint.y() - mEndPoint.y());
+//        painter.drawCircle(x1 + width / 2, y1 + height / 2, width / 2, board.thickness(), board.opaqueness() / 100.0, board.borderColor(), board.fillColor(),
+//                           board.borderStyle() != "None", board.fillStyle() != "None");
     }
 
     painter.end();
