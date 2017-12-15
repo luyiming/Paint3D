@@ -1,5 +1,5 @@
 QT += quick widgets
-CONFIG += c++11
+CONFIG += c++11 console
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -53,3 +53,4 @@ HEADERS += \
     instruments/fillinstrument.h \
     instruments/eraserinstrument.h \
     core/painter.h
+
