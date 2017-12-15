@@ -124,15 +124,21 @@ void Painter::drawCircle(int x, int y, int radius, int thickness, float opacity,
 }
 
 void Painter::drawEllipse(int x, int y, int rx, int ry, int thickness, float opacity, QColor fg, QColor bg, bool usefg, bool usebg) {
-    for (int px = x - rx - 2; px <= x + rx + 2; px++)
-        for (int py = y - ry - 2; py <= y + ry + 2; py++) {
-            if(px < 0 || py < 0 || px >= mImage->width() || py >= mImage->height())
-                continue;
-            QRgb *rowData = (QRgb*)mImage->scanLine(py);
-            QRgb pixelData = rowData[px];
-            QColor color = alphablend(ellipseSDF(px, py, x, y, rx, ry), thickness / 2.0, 0.5, opacity, fg.rgba(), bg.rgba(), pixelData, usefg, usebg);
-            drawPixel(px, py, color);
-        }
+    Q_UNUSED(thickness);
+    Q_UNUSED(opacity);
+    Q_UNUSED(bg);
+    Q_UNUSED(usefg);
+    Q_UNUSED(usebg);
+    drawEllipseBresenham(x, y, rx, ry, fg);
+//    for (int px = x - rx - 2; px <= x + rx + 2; px++)
+//        for (int py = y - ry - 2; py <= y + ry + 2; py++) {
+//            if(px < 0 || py < 0 || px >= mImage->width() || py >= mImage->height())
+//                continue;
+//            QRgb *rowData = (QRgb*)mImage->scanLine(py);
+//            QRgb pixelData = rowData[px];
+//            QColor color = alphablend(ellipseSDF(px, py, x, y, rx, ry), thickness / 2.0, 0.5, opacity, fg.rgba(), bg.rgba(), pixelData, usefg, usebg);
+//            drawPixel(px, py, color);
+//        }
 }
 
 void Painter::alphablend(int x, int y, float alpha, QColor color) {
@@ -229,7 +235,7 @@ void Painter::drawCircleBresenham(int x1, int y1, int r, QColor color) {
     }
 }
 
-void Painter::drawEllipse(int x1, int y1, int rx, int ry, QColor color) {
+void Painter::drawEllipseBresenham(int x1, int y1, int rx, int ry, QColor color) {
     if (rx == ry) {
         drawCircleBresenham(x1, y1, rx, color);
         return;

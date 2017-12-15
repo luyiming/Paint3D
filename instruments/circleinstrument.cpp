@@ -75,12 +75,12 @@ void CircleInstrument::draw(DrawingBoard &board)
     if(mStartPoint != mEndPoint)
     {
         painter.drawEllipse(QRect(mStartPoint, mEndPoint));
-//        CorePainter::Painter painter(board.getImage());
+//        CorePainter::Painter mypainter(board.getImage());
 //        int x1 = mStartPoint.x() < mEndPoint.x() ? mStartPoint.x() : mEndPoint.x();
 //        int y1 = mStartPoint.y() < mEndPoint.y() ? mStartPoint.y() : mEndPoint.y();
 //        int width = abs(mStartPoint.x() - mEndPoint.x());
 //        int height = abs(mStartPoint.y() - mEndPoint.y());
-//        painter.drawCircle(x1 + width / 2, y1 + height / 2, width / 2, board.thickness(), board.opaqueness() / 100.0, board.borderColor(), board.fillColor(),
+//        mypainter.drawEllipse(x1 + width / 2, y1 + height / 2, width / 2, height / 2, board.thickness(), board.opaqueness() / 100.0, board.borderColor(), board.fillColor(),
 //                           board.borderStyle() != "None", board.fillStyle() != "None");
     }
 

@@ -11,7 +11,7 @@ Window {
     width: 1200
     minimumWidth: 1000
     height: 800
-    minimumHeight: 700
+    minimumHeight: 750
     title: qsTr("画图")
 
     Header {

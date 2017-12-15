@@ -51,7 +51,7 @@ void PixelInstrument::draw(DrawingBoard &board)
     if(mStartPoint != mEndPoint)
     {
 //        painter.drawLine(mStartPoint, mEndPoint);
-        mypainter.drawLine(mStartPoint, mEndPoint, board.thickness(), board.opaqueness() / 100.0, board.borderColor());
+        mypainter.drawLine(mStartPoint, mEndPoint, board.thickness(), board.opaqueness() / 100.0, board.brushColor());
     }
 
     if(mStartPoint == mEndPoint)

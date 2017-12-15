@@ -29,7 +29,7 @@ private:
 
     // rx: x轴方向长半轴 (rx, 0)
     // ry: y轴方向短半轴 (0, ry)
-    void drawEllipse(int x1, int y1, int rx, int ry, QColor color);
+    void drawEllipseBresenham(int x1, int y1, int rx, int ry, QColor color);
 
     void alphablend(int x, int y, float alpha, QColor color);
 
