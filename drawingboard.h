@@ -43,6 +43,8 @@ public:
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged)
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged)
 
+    Q_PROPERTY(QStringList vectorModel READ vectorData)
+
 signals:
     void canUndoChanged();
     void canRedoChanged();
@@ -57,6 +59,7 @@ public:
         SHAPE_ROUNDED_SQUARE,
         BRUSH_FILL,
         BRUSH_ERASER,
+        VECTOR_POLYGON,
 
 
         // Don't use it. (Used to know count of instruments)
@@ -99,6 +102,10 @@ private:
     InstrumentType m_instrument = INSTRUMENT_NONE;
 
     QUndoStack *mUndoStack;
+
+public:
+    QStringList vectorData() { return m_vectorDataList; }
+    QStringList m_vectorDataList = {"line", "polygon", "line", "curve"};
 };
 
 #endif // DRAWINGBOARD_H

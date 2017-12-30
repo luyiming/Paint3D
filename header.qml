@@ -35,10 +35,10 @@ Rectangle {
         anchors.centerIn: header
         anchors.horizontalCenterOffset: -128
 
-        property variant headerName: ["brush", "2dshape", "3dshape", "text", "effects", "canvas"]
+        property variant headerName: ["brush", "2dshape", "3dshape", "vector"]
 
         Repeater {
-            model: 6
+            model: 4
 
             CheckableButton {
                 width: 68

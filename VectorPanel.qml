@@ -13,12 +13,8 @@ Rectangle {
     property ParallelAnimation titleAnimation: titleAnimation
     property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
-    property int opaqueness: opaquenessSlider.value
-    property int thickness: thicknessSlider.value
-    property color borderColor: boarderColorID.color
-    property color fillColor: fillColorID.color
-    property string borderStyle: borderStyle.currentText
-    property string fillStyle: fillStyle.currentText
+    property variant vectorModel: []
+
 
     onVisibleChanged: {
         if (visible) {
@@ -95,7 +91,7 @@ Rectangle {
             color: "#0064b6"
             font.pixelSize: 18
             font.family: "Microsoft Yahei UI"
-            text: qsTr("2D图形")
+            text: qsTr("矢量图形")
         }
 
         ExclusiveGroup { id: shapeGroup }
@@ -106,7 +102,7 @@ Rectangle {
             color: "#4d4d75"
             font.pixelSize: 13
             font.family: "Microsoft Yahei UI"
-            text: qsTr("直线")
+            text: qsTr("直线和曲线")
         }
 
         Item {
@@ -160,25 +156,19 @@ Rectangle {
 
         Item {
             width: 220
-            height: 130
+            height: 40
             Grid {
                 id: shapes
                 width: 220
                 columns: 5
                 spacing: 5
 
-                property variant shapeIconName: ["circle", "capsule", "square", "rounded-square", "triangle",
-                    "pentagon", "hexagon", "diamond", "right-triangle", "arrow",
-                    "pointed-arrow", "arc", "five-pointed-star", "six-pointed-star", "four-pointed-star"]
-                property variant shapeTitleName: [qsTr("圆形"), qsTr("胶囊形(TODO)"), qsTr("矩形"), qsTr("圆角矩形"), qsTr("三角形(TODO)"),
-                    qsTr("五边形(TODO)"), qsTr("六边形(TODO)"), qsTr("菱形(TODO)"), qsTr("直角三角形(TODO)"), qsTr("arrow(TODO)"),
-                    qsTr("pointed-arrow(TODO)"), qsTr("圆弧(TODO)"), qsTr("五角星(TODO)"), qsTr("六角星(TODO)"), qsTr("四角星(TODO)")]
-                property variant shapeType: [DrawingBoard.SHAPE_CIRCLE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.SHAPE_SQUARE, DrawingBoard.SHAPE_ROUNDED_SQUARE, DrawingBoard.INSTRUMENT_NONE,
-                    DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
-                    DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+                property variant shapeIconName: ["circle", "square", "polygon"]
+                property variant shapeTitleName: [qsTr("圆形"), qsTr("矩形"), qsTr("多边形")]
+                property variant shapeType: [DrawingBoard.SHAPE_CIRCLE, DrawingBoard.SHAPE_SQUARE, DrawingBoard.VECTOR_POLYGON]
 
                 Repeater {
-                    model: 15
+                    model: 3
 
                     CheckableButton {
                         width: 40
@@ -207,153 +197,40 @@ Rectangle {
             }
         }
 
-        SliderWithBox {
-            id: thicknessSlider
-            Layout.topMargin: 10
-            width: 220
-            title: qsTr("粗细")
-            postfixText: qsTr("像素")
-            minimumValue: 1
-            maximumValue: 100
-            stepSize: 1
-            value: 2
-        }
+        Rectangle {
+            color: "white"
+            border.color: "blue"
+            width: 220; height: 200
 
-        SliderWithBox {
-            id: opaquenessSlider
-            width: 220
-            title: qsTr("不透明度")
-            postfixText: '%'
-            minimumValue: 1
-            maximumValue: 100
-            stepSize: 1
-            value: 100
-        }
-    }
+            ListView {
+                id: listView
+                width: 218; height: 198
+                anchors.centerIn: parent
 
-
-    ColorDialog {
-        id: boarderColorDialog
-//        showAlphaChannel: true
-        onAccepted: {
-            boarderColorID.color = boarderColorDialog.color
-        }
-    }
-
-    ColorDialog {
-        id: fillColorDialog
-//        showAlphaChannel: true
-        onAccepted: {
-            fillColorID.color = fillColorDialog.color
-        }
-    }
-
-    ColumnLayout {
-        anchors.bottom: panel.bottom
-        anchors.bottomMargin: 30
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 12
-        Image {
-            source: 'qrc:/icon/line.png'
-        }
-
-        Text {
-            width: 220
-            Layout.topMargin: 3
-            color: "#4d4d75"
-            font.pixelSize: 13
-            font.family: "Microsoft Yahei UI"
-            text: qsTr("边框颜色")
-        }
-
-        RowLayout {
-            Rectangle {
-                width: 50
-                height: 50
-                color: "#f0f2f3"
-                border.width: 1
-                border.color: "#d2d2d2"
-                Rectangle {
-                    id: boarderColorID
-                    width: 30
-                    height: 30
-                    color: "#000000"
-                    anchors.centerIn: parent
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onContainsMouseChanged: {
-                        if(containsMouse) {
-                            parent.border.color = "#305ccc"
+                model: vectorModel
+                delegate: Component {
+                    Item {
+                        width: 220; height: 30
+                        Text {
+                            anchors.centerIn: parent
+//                            anchors.horizontalCenterOffset: -70
+                            text: modelData
+                            font.pixelSize: 15
+                            font.family: "Microsoft Yahei UI"
+                            color: "#4d4d75"
                         }
-                        else {
-                            parent.border.color = "#d2d2d2"
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: listView.currentIndex = index
                         }
                     }
-                    onClicked: {
-                        boarderColorDialog.open()
-                    }
                 }
-            }
-
-            DropDownBox {
-                id: borderStyle
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                model: [ "Solid", "Dash", "Dot", "DashDot", "None" ]
-                font.pointSize: 10
-                font.family: "Microsoft Yahei UI"
-            }
-        }
-
-        Text {
-            width: 220
-            Layout.topMargin: 3
-            color: "#4d4d75"
-            font.pixelSize: 13
-            font.family: "Microsoft Yahei UI"
-            text: qsTr("填充颜色")
-        }
-
-        RowLayout{
-            Rectangle {
-                width: 50
-                height: 50
-                color: "#f0f2f3"
-                border.width: 1
-                border.color: "#d2d2d2"
-                Rectangle {
-                    id: fillColorID
-                    width: 30
-                    height: 30
-                    color: "#c3c3c3"
-                    anchors.centerIn: parent
+                highlight: Rectangle {
+                    color: "lightsteelblue"
                 }
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onContainsMouseChanged: {
-                        if(containsMouse) {
-                            parent.border.color = "#305ccc"
-                        }
-                        else {
-                            parent.border.color = "#d2d2d2"
-                        }
-                    }
-                    onClicked: {
-                        fillColorDialog.open()
-                    }
-                }
-            }
-            DropDownBox {
-                id: fillStyle
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                model: [ "Solid", "None" ]
-                currentIndex: 1
-                font.pointSize: 10
-                font.family: "Microsoft Yahei UI"
+                focus: true
+                clip: true
+                onCurrentIndexChanged: console.log(currentIndex)
             }
         }
 

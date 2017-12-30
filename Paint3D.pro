@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     undocommand.cpp \
     instruments/fillinstrument.cpp \
     instruments/eraserinstrument.cpp \
-    core/painter.cpp
+    core/painter.cpp \
+    instruments/polygoninstrument.cpp
 
 RESOURCES += qml.qrc \
     icon.qrc
@@ -52,4 +53,5 @@ HEADERS += \
     undocommand.h \
     instruments/fillinstrument.h \
     instruments/eraserinstrument.h \
-    core/painter.h
+    core/painter.h \
+    instruments/polygoninstrument.h

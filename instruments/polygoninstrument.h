@@ -1,15 +1,15 @@
-#ifndef LINEINSTRUMENT_H
-#define LINEINSTRUMENT_H
+#ifndef POLYGONINSTRUMENT_H
+#define POLYGONINSTRUMENT_H
 
 #include "abstractinstrument.h"
 #include <QObject>
 
-class LineInstrument : public AbstractInstrument
+class PolygonInstrument : public AbstractInstrument
 {
     Q_OBJECT
 
 public:
-    explicit LineInstrument(QObject *parent = NULL);
+    explicit PolygonInstrument(QObject *parent = NULL);
 
     void mousePressEvent(QMouseEvent *event, DrawingBoard &board);
     void mouseMoveEvent(QMouseEvent *event, DrawingBoard &board);
@@ -17,4 +17,4 @@ public:
     void draw(DrawingBoard &board);
 };
 
-#endif // LINEINSTRUMENT_H
+#endif // POLYGONINSTRUMENT_H

@@ -83,7 +83,7 @@ Rectangle {
             color: "#0064b6"
             font.pixelSize: 18
             font.family: "Microsoft Yahei UI"
-            text: '画笔'
+            text: qsTr('画笔')
         }
 
         ExclusiveGroup { id: shapeGroup }
@@ -98,7 +98,8 @@ Rectangle {
                 columns: 5
 
                 property variant brushIconName: ["marker", "pen", "oil-brush", "watercolor", "pixel", "pencil", "eraser", "crayon", "spray-can", "fill"]
-                property variant brushTitleName: ["马克笔(TODO)", "钢笔(TODO)", "油画笔(TODO)", "水彩笔刷(TODO)", "像素笔", "铅笔(TODO)", "橡皮擦", "蜡笔(TODO)", "喷雾罐(TODO)", "填充"]
+                property variant brushTitleName: [qsTr("马克笔(TODO)"), qsTr("钢笔(TODO)"), qsTr("油画笔(TODO)"), qsTr("水彩笔刷(TODO)"), qsTr("像素笔"),
+                    qsTr("铅笔(TODO)"), qsTr("橡皮擦"), qsTr("蜡笔(TODO)"), qsTr("喷雾罐(TODO)"), qsTr("填充")]
                 property variant brushType: [DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE,
                                          DrawingBoard.BRUSH_PIXEL, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.BRUSH_ERASER, DrawingBoard.INSTRUMENT_NONE,
                                          DrawingBoard.INSTRUMENT_NONE, DrawingBoard.BRUSH_FILL]
@@ -137,8 +138,8 @@ Rectangle {
             id: thicknessSlider
             Layout.topMargin: 10
             width: 220
-            title: '粗细'
-            postfixText: '像素'
+            title: qsTr('粗细')
+            postfixText: qsTr('像素')
             minimumValue: 1
             maximumValue: 100
             stepSize: 1
@@ -148,7 +149,7 @@ Rectangle {
         SliderWithBox {
             id: opaquenessSlider
             width: 220
-            title: '不透明度'
+            title: qsTr('不透明度')
             postfixText: '%'
             minimumValue: 1
             maximumValue: 100
@@ -172,7 +173,7 @@ Rectangle {
             color: "#4d4d75"
             font.pixelSize: 13
             font.family: "Microsoft Yahei UI"
-            text: '笔刷颜色'
+            text: qsTr('笔刷颜色')
         }
 
         Rectangle {

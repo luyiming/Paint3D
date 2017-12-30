@@ -70,7 +70,7 @@ Rectangle {
             color: "#4d4d75"
             font.pixelSize: 13
             font.family: "Microsoft Yahei UI"
-            text: '选择线的颜色'
+            text: qsTr("选择线的颜色")
         }
 
         Rectangle {
@@ -108,8 +108,8 @@ Rectangle {
             id: thicknessSlider
             Layout.topMargin: 10
             width: 220
-            title: '粗细'
-            postfixText: '像素'
+            title: qsTr("粗细")
+            postfixText: qsTr("像素")
             minimumValue: 1
             maximumValue: 100
             stepSize: 1
@@ -119,7 +119,7 @@ Rectangle {
         SliderWithBox {
             id: opaquenessSlider
             width: 220
-            title: '不透明度'
+            title: qsTr("不透明度")
             postfixText: '%'
             minimumValue: 1
             maximumValue: 100

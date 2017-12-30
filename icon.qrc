@@ -153,5 +153,12 @@
         <file>icon/menu/return.png</file>
         <file>icon/menu/return-hover.png</file>
         <file>icon/menu/return-pressed.png</file>
+        <file>icon/header/vector-off.png</file>
+        <file>icon/header/vector-off-hover.png</file>
+        <file>icon/header/vector-on.png</file>
+        <file>icon/header/vector-on-hover.png</file>
+        <file>icon/2dshape/polygon.png</file>
+        <file>icon/2dshape/polygon-on.png</file>
+        <file>icon/2dshape/polygon-pressed.png</file>
     </qresource>
 </RCC>

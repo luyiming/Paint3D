@@ -38,6 +38,9 @@ Window {
                 drawingboard.thickness = shapePanel.thickness
                 drawingboard.opaqueness = shapePanel.opaqueness
             }
+            else if (currentHeader === 4) {
+                drawingboard.instrument = vectorPanel.instrument
+            }
             else {
                 drawingboard.instrument = DrawingBoard.INSTRUMENT_NONE
                 console.log('not implemented in header instrument selection')
@@ -86,6 +89,21 @@ Window {
         onBorderStyleChanged: drawingboard.borderStyle = borderStyle
         onFillColorChanged: drawingboard.fillColor = fillColor
         onFillStyleChanged: drawingboard.fillStyle = fillStyle
+    }
+
+    VectorPanel {
+        visible: header.currentHeader === 4
+        id: vectorPanel
+        width: 264
+        height: root.height - header.height
+        anchors.top: header.bottom
+        anchors.bottom: root.bottom
+        anchors.right: root.right
+        anchors.left: board.right
+
+        onInstrumentChanged: drawingboard.instrument = instrument
+
+        vectorModel: drawingboard.vectorModel
     }
 
     Rectangle {

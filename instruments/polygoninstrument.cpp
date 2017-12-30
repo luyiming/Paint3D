@@ -1,17 +1,17 @@
-#include "lineinstrument.h"
+#include "polygoninstrument.h"
 #include "../drawingboard.h"
 #include "core/painter.h"
 #include <QPen>
 #include <QPainter>
 
-LineInstrument::LineInstrument(QObject *parent) :
+PolygonInstrument::PolygonInstrument(QObject *parent) :
     AbstractInstrument(parent)
 {
 
 }
 
 
-void LineInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
+void PolygonInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(event->button() == Qt::LeftButton) {
         mStartPoint = mEndPoint = event->pos();
@@ -21,7 +21,7 @@ void LineInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
     }
 }
 
-void LineInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
+void PolygonInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
@@ -29,7 +29,7 @@ void LineInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
     }
 }
 
-void LineInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
+void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(board.isInPaint()) {
         mEndPoint = event->pos();
@@ -39,7 +39,7 @@ void LineInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 }
 
 
-void LineInstrument::draw(DrawingBoard &board)
+void PolygonInstrument::draw(DrawingBoard &board)
 {
     board.setImage(mImageCopy);
     QPainter painter(board.getImage());

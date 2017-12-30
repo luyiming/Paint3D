@@ -12,6 +12,7 @@
 #include "instruments/roundedsquareinstrument.h"
 #include "instruments/fillinstrument.h"
 #include "instruments/eraserinstrument.h"
+#include "instruments/polygoninstrument.h"
 
 DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
@@ -23,6 +24,7 @@ DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
     m_instrumentHandlers[SHAPE_CIRCLE] = new CircleInstrument(this);
     m_instrumentHandlers[SHAPE_SQUARE] = new SquareInstrument(this);
     m_instrumentHandlers[SHAPE_ROUNDED_SQUARE] = new RoundedSquareInstrument(this);
+    m_instrumentHandlers[VECTOR_POLYGON] = new PolygonInstrument(this);
 
     mUndoStack = new QUndoStack(this);
     mUndoStack->setUndoLimit(100);
