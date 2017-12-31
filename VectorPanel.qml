@@ -13,8 +13,18 @@ Rectangle {
     property ParallelAnimation titleAnimation: titleAnimation
     property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
-    property variant vectorModel: []
 
+    property real scaleFactor: 1
+    property int rotateAngle: 0
+
+    onScaleFactorChanged: {
+        console.log("reset")
+        scale.value = scaleFactor;
+    }
+    onRotateAngleChanged: {
+        console.log("reset angle")
+        angle.value = rotateAngle;
+    }
 
     onVisibleChanged: {
         if (visible) {
@@ -194,6 +204,50 @@ Rectangle {
                         }
                     }
                 }
+            }
+        }
+
+        Button {
+            text: "开始裁剪"
+            onClicked: {
+                drawingboard.startClip();
+            }
+        }
+
+        Button {
+            text: "结束裁剪"
+            onClicked: {
+                drawingboard.endClip();
+            }
+        }
+
+        SliderWithBox {
+            id: angle
+            Layout.topMargin: 10
+            width: 220
+            title: qsTr("旋转角度")
+            postfixText: qsTr("°")
+            minimumValue: 0
+            maximumValue: 360
+            stepSize: 1
+            value: rotateAngle
+            onValueChanged: {
+                drawingboard.rotateShape(value)
+            }
+        }
+
+        SliderWithBox {
+            id: scale
+            Layout.topMargin: 10
+            width: 220
+            title: qsTr("缩放比例")
+            postfixText: qsTr("")
+            minimumValue: 0
+            maximumValue: 10
+            stepSize: 0.25
+            value: scaleFactor
+            onValueChanged: {
+                drawingboard.scaleShape(value)
             }
         }
 

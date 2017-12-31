@@ -63,9 +63,17 @@ void DrawingBoard::paint(QPainter *painter){
         QPainter *painter = new QPainter(m_image);
         painter->fillRect(0, 0, m_image->width(), m_image->height(), Qt::white);
         painter->end();
-    }
 
+        m_vector_image = new QImage(width(), height(), QImage::Format_ARGB32);
+        painter = new QPainter(m_vector_image);
+        painter->fillRect(0, 0, m_vector_image->width(), m_vector_image->height(), Qt::white);
+        painter->end();
+    }
     painter->drawImage(QPoint(0, 0), *m_image);
+
+//    painter->setCompositionMode(QPainter::CompositionMode_DestinationOver);
+
+    painter->drawImage(QPoint(0, 0), *m_vector_image);
 }
 
 void DrawingBoard::pushUndoCommand(UndoCommand *command) {
@@ -81,4 +89,51 @@ void DrawingBoard::undoRequest() {
 void DrawingBoard::redoRequest() {
 //    qDebug() << "redo count: " << mUndoStack->count();
     mUndoStack->redo();
+}
+
+void DrawingBoard::startClip()  {
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->startClip();
+    }
+}
+
+void DrawingBoard::endClip()  {
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->endClip(*this);
+    }
+}
+
+
+void DrawingBoard::rotateShape(float angle) {
+    m_rotate_angle = angle;
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->rotate(angle, *this);
+    }
+}
+
+void DrawingBoard::scaleShape(float factor) {
+    m_scale_factor = factor;
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->scale(factor, *this);
+    }
 }

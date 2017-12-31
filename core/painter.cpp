@@ -14,10 +14,12 @@ void Painter::drawPixel(int x, int y, const QColor & color)
         mImage->setPixel(x, y, color.rgb());
 }
 
-void Painter::drawLine(const QPoint & p1, const QPoint & p2, QColor color, int width)
+void Painter::drawLine(const QPoint & p1, const QPoint & p2, QColor color, int width, bool useBresenham)
 {
-//    drawLineBresenham(p1.x(), p1.y(), p2.x(), p2.y(), color);
-    lineSDFAABB(p1.x(), p1.y(), p2.x(), p2.y(), width, color);
+    if (useBresenham)
+        drawLineBresenham(p1.x(), p1.y(), p2.x(), p2.y(), color);
+    else
+        lineSDFAABB(p1.x(), p1.y(), p2.x(), p2.y(), width, color);
 }
 
 void Painter::drawPoint(const QPoint & position, int width)

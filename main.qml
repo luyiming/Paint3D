@@ -102,8 +102,6 @@ Window {
         anchors.left: board.right
 
         onInstrumentChanged: drawingboard.instrument = instrument
-
-        vectorModel: drawingboard.vectorModel
     }
 
     Rectangle {
@@ -127,6 +125,10 @@ Window {
                 onPressed: parent.handleMousePress(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
                 onReleased: parent.handleMouseRelease(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
                 onPositionChanged: parent.handleMouseMove(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
+            }
+            onResetScaleAndRotateChanged: {
+                vectorPanel.rotateAngle = 0;
+                vectorPanel.scaleFactor = 1;
             }
         }
 

@@ -12,12 +12,12 @@ class Painter : public QObject
 
 public:
     explicit Painter(QImage *image, QObject *parent = NULL);
-    void drawLine(const QPoint & p1, const QPoint & p2, QColor color = Qt::black, int width = 1);
+    void drawLine(const QPoint & p1, const QPoint & p2, QColor color = Qt::black, int width = 1, bool useBresenham = false);
     void drawPoint(const QPoint & position, int width = 1);
+    void drawCircle(int x1, int y1, int r, QColor color) { drawCircleBresenham(x1, y1, r, color); }
 
 private:
     void drawPixel(int x, int y, const QColor & color);
-
     void drawLineDDA(int x1, int y1, int x2, int y2, QColor color);
     void drawLineBresenham(int x1, int y1, int x2, int y2, QColor color);
     void drawCircleBresenham(int x1, int y1, int r, QColor color);

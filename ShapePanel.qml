@@ -231,7 +231,6 @@ Rectangle {
         }
     }
 
-
     ColorDialog {
         id: boarderColorDialog
 //        showAlphaChannel: true

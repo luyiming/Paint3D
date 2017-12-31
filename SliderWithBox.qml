@@ -7,10 +7,10 @@ ColumnLayout {
 
     property string title: 'Slider'
     property string postfixText: ''
-    property int minimumValue: 1
-    property int maximumValue: 100
-    property int stepSize: 1
-    property int value: 1
+    property real minimumValue: 1
+    property real maximumValue: 100
+    property real stepSize: 1
+    property real value: 1
 
     RowLayout {
         Layout.preferredWidth: root.width

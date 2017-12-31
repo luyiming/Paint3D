@@ -10,9 +10,12 @@
 #include <QList>
 #include <QString>
 #include <QUndoStack>
+#include <QPoint>
 #include "undocommand.h"
 
 class AbstractInstrument;
+extern QStringList vectorModel; // main.cpp
+void notifyModel();
 
 class DrawingBoard : public QQuickPaintedItem
 {
@@ -43,7 +46,8 @@ public:
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged)
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged)
 
-    Q_PROPERTY(QStringList vectorModel READ vectorData)
+    Q_INVOKABLE void rotateShape(float angle);
+    Q_INVOKABLE void scaleShape(float factor);
 
 signals:
     void canUndoChanged();
@@ -72,6 +76,8 @@ public:
     bool isInPaint() { return m_isInPaint; }
     QImage* getImage() { return m_image; }
     void setImage(const QImage &image) { *m_image = image; }
+    QImage* getVectorImage() { return m_vector_image; }
+    void setVectorImage(const QImage &image) { *m_vector_image = image; }
     InstrumentType instrument() { return m_instrument; }
     void setInstrument(InstrumentType instrument) { m_instrument = instrument; qDebug() << instrument;}
     int thickness() { return m_thickness; }
@@ -90,6 +96,7 @@ public:
 
 private:
     QImage *m_image = nullptr;
+    QImage *m_vector_image = nullptr;
     bool m_isInPaint = false;
 
     int m_thickness = 1;
@@ -103,9 +110,33 @@ private:
 
     QUndoStack *mUndoStack;
 
+private:
+    QStringList m_vectorDataList;
+    QList<QList<QPoint>> m_vector_shapes;
+
 public:
-    QStringList vectorData() { return m_vectorDataList; }
-    QStringList m_vectorDataList = {"line", "polygon", "line", "curve"};
+    void addPolygon(QList<QPoint> polygon) {
+        m_vector_shapes.append(polygon);
+        vectorModel.append("polygon");
+        qDebug() << vectorModel;
+        notifyModel();
+    }
+
+    Q_INVOKABLE void startClip();
+    Q_INVOKABLE void endClip();
+
+    float m_rotate_angle = 0.0f;
+    float m_scale_factor = 1.0f;
+    float getRotateAngle() { return m_rotate_angle; }
+    float getScaleFactor() { return m_scale_factor; }
+    void resetScaleAndRotate() {
+        m_rotate_angle = 0.0f;
+        m_scale_factor = 1.0f;
+        resetScaleAndRotateChanged();
+    }
+
+signals:
+    void resetScaleAndRotateChanged();
 };
 
 #endif // DRAWINGBOARD_H
