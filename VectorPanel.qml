@@ -239,8 +239,6 @@ Rectangle {
             }
         }
 
-
-
         SliderWithBox {
             id: angle
             Layout.topMargin: 10

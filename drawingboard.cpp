@@ -66,15 +66,33 @@ void DrawingBoard::paint(QPainter *painter){
         painter->end();
 
         m_vector_image = new QImage(width(), height(), QImage::Format_ARGB32);
-        painter = new QPainter(m_vector_image);
-        painter->fillRect(0, 0, m_vector_image->width(), m_vector_image->height(), Qt::white);
-        painter->end();
+//        painter = new QPainter(m_vector_image);
+//        painter->fillRect(0, 0, m_vector_image->width(), m_vector_image->height(), Qt::white);
+//        painter->end();
     }
-    painter->drawImage(QPoint(0, 0), *m_image);
 
-//    painter->setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    QImage blend_image = *m_image;
+//    QPainter *img_painter = new QPainter(&blend_image);
+//    img_painter->drawImage(QPoint(0, 0), *m_image);
+//    img_painter->drawImage(QPoint(0, 0), *m_vector_image);
 
-    painter->drawImage(QPoint(0, 0), *m_vector_image);
+    for (int x = 0; x < m_image->width(); x++) {
+        for (int y = 0; y < m_image->height(); y++) {
+            QRgb r1 = m_image->pixel(x, y);
+            QRgb r2 = m_vector_image->pixel(x, y);
+            QColor color(
+                qRed(r1) * (1 - qAlpha(r2) / 255) + qRed(r2) * (qAlpha(r2) / 255),
+                qGreen(r1) * (1 - qAlpha(r2) / 255) + qGreen(r2) * (qAlpha(r2) / 255),
+                qBlue(r1) * (1 - qAlpha(r2) / 255) + qBlue(r2) * (qAlpha(r2) / 255),
+                        255);
+            blend_image.setPixel(x, y, color.rgb());
+        }
+    }
+      painter->drawImage(QPoint(0, 0), blend_image);
+
+//    painter->drawImage(QPoint(0, 0), *m_vector_image);
+
+
 }
 
 void DrawingBoard::pushUndoCommand(UndoCommand *command) {

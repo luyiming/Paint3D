@@ -51,6 +51,9 @@ public:
     Q_INVOKABLE void setCurveMode(int curve_points);
     Q_INVOKABLE void setPolygonMode();
 
+//    Q_INVOKABLE void saveToFile(QUrl filepath);
+//    Q_INVOKABLE void readFromFile(QUrl filepath);
+
 
 signals:
     void canUndoChanged();

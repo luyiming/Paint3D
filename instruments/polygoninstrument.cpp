@@ -175,11 +175,12 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
 void PolygonInstrument::draw(DrawingBoard &board)
 {
     QImage *vector_image = new QImage(board.getVectorImage()->width(), board.getVectorImage()->height(), QImage::Format_ARGB32);
-    QPainter bg_painter(vector_image);
-    bg_painter.fillRect(0, 0, vector_image->width(), vector_image->height(), Qt::white);
-    bg_painter.end();
+//    QPainter bg_painter(vector_image);
+//    bg_painter.fillRect(0, 0, vector_image->width(), vector_image->height(), Qt::white);
+//    bg_painter.end();
 
-    CorePainter::Painter mypainter(vector_image);
+//    CorePainter::Painter mypainter(vector_image);
+    QPainter mypainter(vector_image);
 
     // draw existing shapes
     for (int i = 0; i < m_polygons.size(); i++) {
@@ -203,7 +204,10 @@ void PolygonInstrument::draw(DrawingBoard &board)
         }
         for(int i = 0; i < m_points.size(); i++) {
             QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
-            mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
+//            mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
+            mypainter.setPen(QPen(Qt::blue));
+            mypainter.drawEllipse(p, m_selectRange, m_selectRange);
+            mypainter.setPen(QPen());
         }
 
         if (board.isInPaint()) {
@@ -225,14 +229,18 @@ void PolygonInstrument::draw(DrawingBoard &board)
 
         for(int i = 0; i < m_points.size(); i++) {
             QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
-            mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
+            mypainter.setPen(QPen(Qt::blue));
+            mypainter.drawEllipse(p, m_selectRange, m_selectRange);
+            mypainter.setPen(QPen());
+//            mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
         }
     } else {
 
     }
 
     if (isSelected()) {
-        QPainter painter(vector_image);
+//        QPainter painter(vector_image);
+        QPainter &painter = mypainter;
 
         // draw center point
         painter.setBrush(QBrush(Qt::green));
@@ -269,6 +277,7 @@ void PolygonInstrument::draw(DrawingBoard &board)
             m_selectBox = QRect(left - 20, bottom - 20, right - left + 40, top - bottom + 40);
             painter.setPen(QPen(Qt::blue, 1, Qt::DashLine));
             painter.drawRect(m_selectBox);
+            painter.end();
         }
     }
 
