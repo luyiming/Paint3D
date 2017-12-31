@@ -112,7 +112,7 @@ Rectangle {
             color: "#4d4d75"
             font.pixelSize: 13
             font.family: "Microsoft Yahei UI"
-            text: qsTr("直线和曲线")
+            text: qsTr("贝塞尔曲线")
         }
 
         Item {
@@ -122,12 +122,12 @@ Rectangle {
                 id: lines_and_curves
                 width: 220
 
-                property variant shapeIconName: ["line", "curve2", "curve3", "curve4"]
-                property variant shapeTitleName: [qsTr("直线"), qsTr("两点曲线(TODO)"), qsTr("三点曲线(TODO)"), qsTr("四点曲线(TODO)")]
-                property variant shapeType: [DrawingBoard.SHAPE_LINE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE, DrawingBoard.INSTRUMENT_NONE]
+                property variant shapeIconName: ["curve3", "curve4"]
+                property variant shapeTitleName: [qsTr("三点曲线(TODO)"), qsTr("四点曲线(TODO)")]
+                property variant shapeType: [DrawingBoard.VECTOR_POLYGON, DrawingBoard.VECTOR_POLYGON]
 
                 Repeater {
-                    model: 4
+                    model: 2
 
                     CheckableButton {
                         width: 40
@@ -149,6 +149,12 @@ Rectangle {
                                 bigTitle.text = lines_and_curves.shapeTitleName[index]
                                 titleAnimation.start()
                                 panel.instrument = lines_and_curves.shapeType[index]
+                                if (index === 0) {
+                                    drawingboard.setCurveMode(3);
+                                } else if (index === 1) {
+//                                    console.log("curve4")
+                                    drawingboard.setCurveMode(4);
+                                }
                             }
                         }
                     }
@@ -200,6 +206,9 @@ Rectangle {
                                 bigTitle.text = shapes.shapeTitleName[index]
                                 titleAnimation.start()
                                 panel.instrument = shapes.shapeType[index]
+                                if (index === 2) {
+                                    drawingboard.setPolygonMode();
+                                }
                             }
                         }
                     }

@@ -8,6 +8,7 @@
 QPoint getCenterPoint(QList<QPoint> &points);
 QPoint do_rotate(QPoint p, float angle, QPoint center);
 QPoint do_scale(QPoint p, float factor, QPoint center);
+QList<QPoint> bezierCurve(QList<QPoint> points);
 
 PolygonInstrument::PolygonInstrument(QObject *parent) :
     AbstractInstrument(parent)
@@ -90,8 +91,14 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
             }
             board.setIsInPaint(false);
             setIsSelected(false);
-            board.addPolygon(m_points);
-            m_polygons.append(m_points);
+            if (current_shape == SHAPE_POLYGON) {
+                board.addPolygon(m_points);
+                m_polygons.append(m_points);
+            } else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4) {
+                board.addCurve(m_points);
+                m_curves.append(m_points);
+            }
+
             m_points.clear();
             draw(board);
             board.resetScaleAndRotate();
@@ -100,7 +107,6 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
 //            qDebug() << "in paint";
             setIsSelected(false);
             isDragPointMode = false;
-            current_shape = SHAPE_POLYGON;
             m_points.clear();
             mStartPoint = mEndPoint = event->pos();
             board.setIsInPaint(true);
@@ -110,21 +116,44 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
             draw(board);
         }
         else if(board.isInPaint()) {
-            mStartPoint = mEndPoint = event->pos();
-
-            if (m_points.size() > 2) {
-                float rx = m_points[0].x() - event->pos().x();
-                float ry = m_points[0].y() - event->pos().y();
-                if (sqrt(rx*rx + ry*ry) < m_selectRange) {
-                    mStartPoint = mEndPoint = m_points[0];
+            if (current_shape == SHAPE_CURVE3) {
+                mStartPoint = mEndPoint = event->pos();
+                if (m_points.size() == 2) {
                     setIsSelected(true);
                     board.setIsInPaint(false);
                 }
+                m_points.append(mEndPoint);
+                m_center_point = getCenterPoint(m_points);
+                draw(board);
+            }
+            else if (current_shape == SHAPE_CURVE4) {
+                mStartPoint = mEndPoint = event->pos();
+                if (m_points.size() == 3) {
+                    setIsSelected(true);
+                    board.setIsInPaint(false);
+                }
+                m_points.append(mEndPoint);
+                m_center_point = getCenterPoint(m_points);
+                draw(board);
+            }
+            else {
+                mStartPoint = mEndPoint = event->pos();
+
+                if (m_points.size() > 2) {
+                    float rx = m_points[0].x() - event->pos().x();
+                    float ry = m_points[0].y() - event->pos().y();
+                    if (sqrt(rx*rx + ry*ry) < m_selectRange) {
+                        mStartPoint = mEndPoint = m_points[0];
+                        setIsSelected(true);
+                        board.setIsInPaint(false);
+                    }
+                }
+
+                m_points.append(mEndPoint);
+                m_center_point = getCenterPoint(m_points);
+                draw(board);
             }
 
-            m_points.append(mEndPoint);
-            m_center_point = getCenterPoint(m_points);
-            draw(board);
     //        board.setIsInPaint(false);
         }
     }
@@ -145,6 +174,12 @@ void PolygonInstrument::draw(DrawingBoard &board)
             mypainter.drawLine(m_polygons[i][j - 1], m_polygons[i][j]);
         }
     }
+    for (int i = 0; i < m_curves.size(); i++) {
+        QList<QPoint> points = bezierCurve(m_curves[i]);
+        for(int j = 1; j < points.size(); j++) {
+            mypainter.drawLine(points[j - 1], points[j]);
+        }
+    }
 
     // draw current drawing shape
     if (current_shape == SHAPE_POLYGON) {
@@ -157,19 +192,35 @@ void PolygonInstrument::draw(DrawingBoard &board)
             QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
             mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
         }
-    }
-    else {
 
-    }
+        if(mStartPoint != mEndPoint)
+        {
+            mypainter.drawLine(mStartPoint, mEndPoint);
+        }
 
-    if(mStartPoint != mEndPoint)
-    {
-        mypainter.drawLine(mStartPoint, mEndPoint);
+        if(mStartPoint == mEndPoint)
+        {
+            mypainter.drawPoint(mStartPoint);
+        }
     }
+    else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4) {
+        QList<QPoint> points = m_points;
+        if (board.isInPaint()) {
+            points.append(mEndPoint);
+        }
+        points = bezierCurve(points);
+        for(int i = 1; i < points.size(); i++) {
+            QPoint p1 = do_rotate(do_scale(points[i - 1], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
+            QPoint p2 = do_rotate(do_scale(points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
+            mypainter.drawLine(p1, p2);
+        }
 
-    if(mStartPoint == mEndPoint)
-    {
-        mypainter.drawPoint(mStartPoint);
+        for(int i = 0; i < m_points.size(); i++) {
+            QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
+            mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
+        }
+    } else {
+
     }
 
     if (isSelected()) {
@@ -185,29 +236,26 @@ void PolygonInstrument::draw(DrawingBoard &board)
         }
         else {
             int left, bottom, right, top;
-            if (current_shape == SHAPE_POLYGON) {
+            QPoint p = do_rotate(do_scale(m_points[0], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
 
-                QPoint p = do_rotate(do_scale(m_points[0], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
+            left = p.x();
+            bottom = p.y();
+            right = p.x();
+            top = p.y();
+            for (int i = 0; i < m_points.size(); i++) {
+                QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
 
-                left = p.x();
-                bottom = p.y();
-                right = p.x();
-                top = p.y();
-                for (int i = 0; i < m_points.size(); i++) {
-                    QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
-
-                    if (p.x() < left) {
-                        left = p.x();
-                    }
-                    if (p.x() > right) {
-                        right = p.x();
-                    }
-                    if (p.y() < bottom) {
-                        bottom = p.y();
-                    }
-                    if (p.y() > top) {
-                        top = p.y();
-                    }
+                if (p.x() < left) {
+                    left = p.x();
+                }
+                if (p.x() > right) {
+                    right = p.x();
+                }
+                if (p.y() < bottom) {
+                    bottom = p.y();
+                }
+                if (p.y() > top) {
+                    top = p.y();
                 }
             }
             m_selectBox = QRect(left - 20, bottom - 20, right - left + 40, top - bottom + 40);
@@ -408,4 +456,40 @@ void PolygonInstrument::rotate(float angle, DrawingBoard &board) {
 
 void PolygonInstrument::scale(float factor, DrawingBoard &board) {
     draw(board);
+}
+
+void PolygonInstrument::setCurveMode(int curve_points) {
+    if (curve_points == 3) {
+        current_shape = SHAPE_CURVE3;
+//        qDebug() << "1111 " << curve_points;
+    } else if (curve_points == 4) {
+        current_shape = SHAPE_CURVE4;
+    } else {
+        qDebug() << "curve mode unknown";
+    }
+}
+
+QPoint getBezierPoint(QList<QPoint> points, float delta) {
+    QList<QPoint> tmp = points;
+    int i = points.size() - 1;
+    while (i > 0) {
+        for (int k = 0; k < i; k++)
+            tmp[k] = tmp[k] + delta * (tmp[k+1] - tmp[k]);
+        i--;
+    }
+    return tmp[0];
+}
+
+QList<QPoint> bezierCurve(QList<QPoint> points) {
+    QList<QPoint> result;
+    if (points.size() <= 2) {
+         return points;
+    }
+    else {
+        for (float i = 0 ; i < 1 ; i += 0.01 ){
+            result.append(getBezierPoint(points, i));
+        }
+    }
+
+    return result;
 }

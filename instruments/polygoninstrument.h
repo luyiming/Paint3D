@@ -6,6 +6,7 @@
 #include <QList>
 #include <QPoint>
 #include <QRect>
+#include <QDebug>
 
 class PolygonInstrument : public AbstractInstrument
 {
@@ -31,6 +32,9 @@ public:
     void rotate(float angle, DrawingBoard &board);
     void scale(float factor, DrawingBoard &board);
 
+    void setCurveMode(int curve_points);
+    void setPolygonMode() { qDebug() <<"polygon"; current_shape = SHAPE_POLYGON; }
+
 private:
     QPoint m_clipStart, m_clipEnd;
     int m_selectRange = 10; // 5px
@@ -41,8 +45,9 @@ private:
     QRect m_clipBox;
 
     QList<QList<QPoint>> m_polygons;
+    QList<QList<QPoint>> m_curves;
 
-    enum { SHAPE_POLYGON, SHAPE_NONE } current_shape = SHAPE_NONE;
+    enum { SHAPE_POLYGON, SHAPE_CURVE3, SHAPE_CURVE4, SHAPE_NONE } current_shape = SHAPE_NONE;
     QList<QPoint> m_points;
     QList<QPoint> m_translate_points;
 

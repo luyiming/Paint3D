@@ -137,3 +137,25 @@ void DrawingBoard::scaleShape(float factor) {
         intr->scale(factor, *this);
     }
 }
+
+void DrawingBoard::setCurveMode(int curve_points) {
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->setCurveMode(curve_points);
+    }
+}
+
+void DrawingBoard::setPolygonMode() {
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->setPolygonMode();
+    }
+}

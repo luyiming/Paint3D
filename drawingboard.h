@@ -48,6 +48,9 @@ public:
 
     Q_INVOKABLE void rotateShape(float angle);
     Q_INVOKABLE void scaleShape(float factor);
+    Q_INVOKABLE void setCurveMode(int curve_points);
+    Q_INVOKABLE void setPolygonMode();
+
 
 signals:
     void canUndoChanged();
@@ -118,7 +121,12 @@ public:
     void addPolygon(QList<QPoint> polygon) {
         m_vector_shapes.append(polygon);
         vectorModel.append("polygon");
-        qDebug() << vectorModel;
+        notifyModel();
+    }
+
+    void addCurve(QList<QPoint> curve) {
+        m_vector_shapes.append(curve);
+        vectorModel.append("curve");
         notifyModel();
     }
 
