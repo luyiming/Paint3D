@@ -137,14 +137,10 @@ public:
     float m_scale_factor = 1.0f;
     float getRotateAngle() { return m_rotate_angle; }
     float getScaleFactor() { return m_scale_factor; }
-    void resetScaleAndRotate() {
-        m_rotate_angle = 0.0f;
-        m_scale_factor = 1.0f;
-        resetScaleAndRotateChanged();
-    }
 
 signals:
     void resetScaleAndRotateChanged();
+    bool canClip(bool can);
 };
 
 #endif // DRAWINGBOARD_H

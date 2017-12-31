@@ -25,6 +25,7 @@ DrawingBoard::DrawingBoard(QQuickItem *parent) : QQuickPaintedItem(parent)
     m_instrumentHandlers[SHAPE_SQUARE] = new SquareInstrument(this);
     m_instrumentHandlers[SHAPE_ROUNDED_SQUARE] = new RoundedSquareInstrument(this);
     m_instrumentHandlers[VECTOR_POLYGON] = new PolygonInstrument(this);
+    ((PolygonInstrument*)m_instrumentHandlers[VECTOR_POLYGON])->setBoard(*this);
 
     mUndoStack = new QUndoStack(this);
     mUndoStack->setUndoLimit(100);
@@ -159,3 +160,4 @@ void DrawingBoard::setPolygonMode() {
         intr->setPolygonMode();
     }
 }
+

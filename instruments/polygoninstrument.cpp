@@ -26,6 +26,12 @@ void PolygonInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
 //        mImageCopy = QImage(*board.getVectorImage());
     }
     else if (event->button() == Qt::LeftButton && isSelected()) {
+        float rx = m_center_point.x() - event->pos().x();
+        float ry = m_center_point.y() - event->pos().y();
+        if (sqrt(rx*rx + ry*ry) < 3) {
+            isDragCenterMode = true;
+        }
+
         for (int i = 0; i < m_points.size(); i++) {
             QPoint p = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
             float rx = p.x() - event->pos().x();
@@ -66,16 +72,21 @@ void PolygonInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
         }
         draw(board);
     }
+    else if (isDragCenterMode) {
+        m_center_point = event->pos();
+        draw(board);
+    }
 }
 
 void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board)
 {
     if(event->button() == Qt::RightButton) {
+        setIsClipMode(false);
+        m_hasClipBox = false;
         board.setIsInPaint(false);
         setIsSelected(false);
         m_points.clear();
-        board.setVectorImage(mImageCopy);
-        board.update();
+        draw(board);
     }
     else if (event->button() == Qt::LeftButton) {
         if (isClipMode()) {
@@ -84,6 +95,9 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
         }
         else if (isDragPointMode) {
             isDragPointMode = false;
+        }
+        else if (isDragCenterMode) {
+            isDragCenterMode = false;
         }
         else if (isSelected() && !m_selectBox.contains(event->pos())) {
             for(int i = 0; i < m_points.size(); i++) {
@@ -101,7 +115,6 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
 
             m_points.clear();
             draw(board);
-            board.resetScaleAndRotate();
         }
         else if (!board.isInPaint()) {
 //            qDebug() << "in paint";
@@ -193,15 +206,10 @@ void PolygonInstrument::draw(DrawingBoard &board)
             mypainter.drawCircle(p.x(), p.y(), m_selectRange, Qt::blue);
         }
 
-        if(mStartPoint != mEndPoint)
-        {
+        if (board.isInPaint()) {
             mypainter.drawLine(mStartPoint, mEndPoint);
         }
 
-        if(mStartPoint == mEndPoint)
-        {
-            mypainter.drawPoint(mStartPoint);
-        }
     }
     else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4) {
         QList<QPoint> points = m_points;
@@ -404,6 +412,7 @@ void PolygonInstrument::endClip(DrawingBoard &board) {
         }
         draw(board);
         setIsSelected(true);
+        m_hasClipBox = false;
     }
 }
 

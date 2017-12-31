@@ -2,6 +2,7 @@
 #define POLYGONINSTRUMENT_H
 
 #include "abstractinstrument.h"
+#include "drawingboard.h"
 #include <QObject>
 #include <QList>
 #include <QPoint>
@@ -14,13 +15,21 @@ class PolygonInstrument : public AbstractInstrument
 
 public:
     explicit PolygonInstrument(QObject *parent = NULL);
+    void setBoard(DrawingBoard &board) {
+        m_board = &board;
+    }
 
     void mousePressEvent(QMouseEvent *event, DrawingBoard &board);
     void mouseMoveEvent(QMouseEvent *event, DrawingBoard &board);
     void mouseReleaseEvent(QMouseEvent *event, DrawingBoard &board);
     void draw(DrawingBoard &board);
 
-    void setIsSelected(bool isSelected) { m_select_mode = isSelected; }
+    void setIsSelected(bool isSelected) {
+        m_select_mode = isSelected;
+        if (current_shape == SHAPE_POLYGON) {
+            m_board->canClip(isSelected);
+        }
+    }
     bool isSelected() { return m_select_mode; }
 
     void setIsClipMode(bool isClipMode) { m_clip_mode = isClipMode; }
@@ -54,7 +63,10 @@ private:
     QPoint m_center_point;
 
     bool isDragPointMode = false;
+    bool isDragCenterMode = false;
     int dragPointIndex = 0;
+
+    DrawingBoard *m_board = NULL;
 };
 
 #endif // POLYGONINSTRUMENT_H

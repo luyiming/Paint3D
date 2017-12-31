@@ -14,17 +14,7 @@ Rectangle {
     property ParallelAnimation popupAnimation: popupAnimation
     property int instrument: DrawingBoard.INSTRUMENT_NONE
 
-    property real scaleFactor: 1
-    property int rotateAngle: 0
-
-    onScaleFactorChanged: {
-        console.log("reset")
-        scale.value = scaleFactor;
-    }
-    onRotateAngleChanged: {
-        console.log("reset angle")
-        angle.value = rotateAngle;
-    }
+    property bool canClip: false
 
     onVisibleChanged: {
         if (visible) {
@@ -123,7 +113,7 @@ Rectangle {
                 width: 220
 
                 property variant shapeIconName: ["curve3", "curve4"]
-                property variant shapeTitleName: [qsTr("三点曲线(TODO)"), qsTr("四点曲线(TODO)")]
+                property variant shapeTitleName: [qsTr("三点曲线"), qsTr("四点曲线")]
                 property variant shapeType: [DrawingBoard.VECTOR_POLYGON, DrawingBoard.VECTOR_POLYGON]
 
                 Repeater {
@@ -179,56 +169,77 @@ Rectangle {
                 columns: 5
                 spacing: 5
 
-                property variant shapeIconName: ["circle", "square", "polygon"]
-                property variant shapeTitleName: [qsTr("圆形"), qsTr("矩形"), qsTr("多边形")]
-                property variant shapeType: [DrawingBoard.SHAPE_CIRCLE, DrawingBoard.SHAPE_SQUARE, DrawingBoard.VECTOR_POLYGON]
+                CheckableButton {
+                    id: polygon_button
+                    width: 40
+                    height: 40
 
-                Repeater {
-                    model: 3
+                    exclusiveGroup: shapeGroup
 
-                    CheckableButton {
-                        width: 40
-                        height: 40
+                    source: 'qrc:/icon/2dshape/polygon.png'
 
-                        exclusiveGroup: shapeGroup
+                    on_img: 'qrc:/icon/2dshape/polygon-on.png'
+                    on_hover_img: 'qrc:/icon/2dshape/polygon-on.png'
+                    on_pressed_img: 'qrc:/icon/2dshape/polygon-on.png'
+                    off_img: 'qrc:/icon/2dshape/polygon.png'
+                    off_hover_img: 'qrc:/icon/2dshape/polygon-on.png'
+                    off_pressed_img: 'qrc:/icon/2dshape/polygon-pressed.png'
 
-                        source: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
-
-                        on_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                        on_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                        on_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                        off_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '.png'
-                        off_hover_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-on.png'
-                        off_pressed_img: 'qrc:/icon/2dshape/' + shapes.shapeIconName[index] + '-pressed.png'
-
-                        onCheckedChanged: {
-                            if (checked && bigTitle.text !== shapes.shapeTitleName[index]) {
-                                bigTitle.text = shapes.shapeTitleName[index]
-                                titleAnimation.start()
-                                panel.instrument = shapes.shapeType[index]
-                                if (index === 2) {
-                                    drawingboard.setPolygonMode();
-                                }
-                            }
+                    onCheckedChanged: {
+                        if (checked && bigTitle.text !== qsTr("多边形")) {
+                            bigTitle.text = qsTr("多边形")
+                            titleAnimation.start()
+                            panel.instrument = DrawingBoard.VECTOR_POLYGON
+                            drawingboard.setPolygonMode();
                         }
                     }
                 }
             }
         }
 
-        Button {
-            text: "开始裁剪"
-            onClicked: {
-                drawingboard.startClip();
+        Row {
+            spacing: 10
+            Button {
+                visible: polygon_button.checked && canClip
+                opacity: polygon_button.checked && canClip ? 1.0 : 0.0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                text: "绘制裁剪框"
+                onClicked: {
+                    drawingboard.startClip();
+                    clip_button.visible = true;
+                    clip_button.opacity = 1.0
+                }
+            }
+
+            Button {
+                id: clip_button
+                visible: false
+                opacity: 0.0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                text: "裁剪"
+                onClicked: {
+                    drawingboard.endClip();
+                    visible = false;
+                    opacity = 0.0
+                }
             }
         }
 
-        Button {
-            text: "结束裁剪"
-            onClicked: {
-                drawingboard.endClip();
-            }
-        }
+
 
         SliderWithBox {
             id: angle
@@ -239,10 +250,27 @@ Rectangle {
             minimumValue: 0
             maximumValue: 360
             stepSize: 1
-            value: rotateAngle
+            value: 0
             onValueChanged: {
                 drawingboard.rotateShape(value)
             }
+
+            visible: canClip
+            opacity: canClip ? 1.0 : 0.0
+
+            onVisibleChanged: {
+                if (visible)
+                    value = 0
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+
         }
 
         SliderWithBox {
@@ -253,10 +281,25 @@ Rectangle {
             postfixText: qsTr("")
             minimumValue: 0
             maximumValue: 10
-            stepSize: 0.25
-            value: scaleFactor
+            stepSize: 0.125
+            value: 1
             onValueChanged: {
                 drawingboard.scaleShape(value)
+            }
+
+            visible: canClip
+            opacity: canClip ? 1.0 : 0.0
+
+            onVisibleChanged: {
+                if (visible)
+                    value = 1
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
 
