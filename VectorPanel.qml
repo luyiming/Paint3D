@@ -15,6 +15,8 @@ Rectangle {
     property int instrument: DrawingBoard.INSTRUMENT_NONE
 
     property bool canClip: false
+    property bool showRotateAndScale: false
+
 
     onVisibleChanged: {
         if (visible) {
@@ -253,8 +255,8 @@ Rectangle {
                 drawingboard.rotateShape(value)
             }
 
-            visible: canClip
-            opacity: canClip ? 1.0 : 0.0
+            visible: canClip || showRotateAndScale
+            opacity: canClip || showRotateAndScale ? 1.0 : 0.0
 
             onVisibleChanged: {
                 if (visible)
@@ -285,8 +287,8 @@ Rectangle {
                 drawingboard.scaleShape(value)
             }
 
-            visible: canClip
-            opacity: canClip ? 1.0 : 0.0
+            visible: canClip || showRotateAndScale
+            opacity: canClip || showRotateAndScale ? 1.0 : 0.0
 
             onVisibleChanged: {
                 if (visible)

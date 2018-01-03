@@ -127,8 +127,11 @@ Window {
                 onPositionChanged: parent.handleMouseMove(mouse.x, mouse.y, mouse.button, mouse.buttons, mouse.modifiers)
             }
             onCanClip: {
-                console.log("can clip")
+//                console.log("can clip")
                 vectorPanel.canClip = can;
+            }
+            onShowRotateAndScale: {
+                vectorPanel.showRotateAndScale = show;
             }
         }
 

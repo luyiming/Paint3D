@@ -143,9 +143,13 @@ public:
     void resetRotateAngle() { m_rotate_angle = 0.0f; }
     void resetScaleFactor() { m_scale_factor = 1.0f; }
 
+    Q_INVOKABLE void openFile(QString filePath);
+    Q_INVOKABLE void saveFile(QString filePath);
+
 signals:
     void resetScaleAndRotateChanged();
     bool canClip(bool can);
+    bool showRotateAndScale(bool show);
 };
 
 #endif // DRAWINGBOARD_H

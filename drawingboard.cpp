@@ -5,6 +5,8 @@
 #include <QBrush>
 #include <QObject>
 #include <QDebug>
+#include <QFile>
+#include <QDir>
 #include "instruments/pixelinstrument.h"
 #include "instruments/lineinstrument.h"
 #include "instruments/circleinstrument.h"
@@ -179,3 +181,36 @@ void DrawingBoard::setPolygonMode() {
     }
 }
 
+void DrawingBoard::openFile(QString filePath) {
+    QImage image(QUrl(filePath).toLocalFile());
+    if (m_image == NULL) {
+        m_image = new QImage(width(), height(), QImage::Format_ARGB32);
+    }
+//    image.scaled(width(), height());
+    QPainter painter(m_image);
+    painter.drawImage(0, 0, image);
+//    *m_image = image;
+    painter.end();
+    this->update();
+//    qDebug() << filePath;
+}
+
+void DrawingBoard::saveFile(QString filePath) {
+    qDebug() << filePath;
+
+    QImage blend_image = *m_image;
+    for (int x = 0; x < m_image->width(); x++) {
+        for (int y = 0; y < m_image->height(); y++) {
+            QRgb r1 = m_image->pixel(x, y);
+            QRgb r2 = m_vector_image->pixel(x, y);
+            QColor color(
+                qRed(r1) * (1 - qAlpha(r2) / 255) + qRed(r2) * (qAlpha(r2) / 255),
+                qGreen(r1) * (1 - qAlpha(r2) / 255) + qGreen(r2) * (qAlpha(r2) / 255),
+                qBlue(r1) * (1 - qAlpha(r2) / 255) + qBlue(r2) * (qAlpha(r2) / 255),
+                        255);
+            blend_image.setPixel(x, y, color.rgb());
+        }
+    }
+    bool succ = blend_image.save(QUrl(filePath).toLocalFile() + QDir::separator() + "test.png");
+    qDebug() << succ;
+}

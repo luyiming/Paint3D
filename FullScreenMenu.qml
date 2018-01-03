@@ -5,26 +5,27 @@ import QtQuick.Layouts 1.3
 Rectangle {
     id: root
     signal returnClicked
-    signal openFile(string filePath)
-    signal saveFile(string filePath)
     signal newButtonClicked
 
     FileDialog {
         id: openFileDialog
-        title: "Please choose a file"
+        title: qsTr("请选择一个图片文件")
         folder: "."
+        nameFilters: [ "Image files (*.jpg *.png)" ]
         onAccepted: {
-            openFile(openFileDialog.fileUrl)
-            console.log("Open file: " + openFileDialog.fileUrls)
+            drawingboard.openFile(openFileDialog.fileUrl)
+            root.returnClicked()
+//            console.log("Open file: " + openFileDialog.fileUrls)
         }
     }
     FileDialog {
         id: saveFileDialog
-        title: "Please choose a file"
+        title: qsTr("请选择一个文件夹")
         folder: "."
+        selectFolder: true
         onAccepted: {
-            saveFile(saveFileDialog.fileUrl)
-            console.log("Save file: " + saveFileDialog.fileUrls)
+            drawingboard.saveFile(saveFileDialog.folder)
+//            console.log("Save file: " + saveFileDialog.fileUrls)
         }
     }
 

@@ -33,6 +33,7 @@ public:
                 m_board->resetScaleFactor();
             }
         }
+        m_board->showRotateAndScale(isSelected);
     }
     bool isSelected() { return m_select_mode; }
 
