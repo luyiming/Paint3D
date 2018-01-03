@@ -140,6 +140,8 @@ public:
     float m_scale_factor = 1.0f;
     float getRotateAngle() { return m_rotate_angle; }
     float getScaleFactor() { return m_scale_factor; }
+    void resetRotateAngle() { m_rotate_angle = 0.0f; }
+    void resetScaleFactor() { m_scale_factor = 1.0f; }
 
 signals:
     void resetScaleAndRotateChanged();

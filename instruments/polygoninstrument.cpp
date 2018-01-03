@@ -42,6 +42,11 @@ void PolygonInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
                 break;
             }
         }
+
+        if (!isDragCenterMode && !isDragPointMode && m_selectBox.contains(event->pos())) {
+            drag_lasts_pos = event->pos();
+            isDragShapeMode = true;
+        }
     }
 }
 
@@ -65,15 +70,26 @@ void PolygonInstrument::mouseMoveEvent(QMouseEvent *event, DrawingBoard &board)
     else if (isDragPointMode) {
         QPoint new_pos = do_rotate(do_scale(event->pos(), 1.0f / board.getScaleFactor(), m_center_point), -board.getRotateAngle(), m_center_point);
         m_points[dragPointIndex] = new_pos;
-        if (dragPointIndex == 0) {
-            m_points.last() = new_pos;
-        } else if (dragPointIndex == m_points.size() - 1) {
-            m_points.first() = new_pos;
+        if (current_shape == SHAPE_POLYGON) {
+            if (dragPointIndex == 0) {
+                m_points.last() = new_pos;
+            } else if (dragPointIndex == m_points.size() - 1) {
+                m_points.first() = new_pos;
+            }
         }
         draw(board);
     }
     else if (isDragCenterMode) {
         m_center_point = event->pos();
+        draw(board);
+    }
+    else if (isDragShapeMode) {
+        QPoint rel = event->pos() - drag_lasts_pos;
+        for (int i = 0; i < m_points.size(); i++) {
+            m_points[i] += rel;
+        }
+        m_center_point += rel;
+        drag_lasts_pos = event->pos();
         draw(board);
     }
 }
@@ -99,6 +115,9 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
         else if (isDragCenterMode) {
             isDragCenterMode = false;
         }
+        else if (isDragShapeMode) {
+            isDragShapeMode = false;
+        }
         else if (isSelected() && !m_selectBox.contains(event->pos())) {
             for(int i = 0; i < m_points.size(); i++) {
                 m_points[i] = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
@@ -116,10 +135,12 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
             m_points.clear();
             draw(board);
         }
-        else if (!board.isInPaint()) {
+        else if (!isSelected() && !board.isInPaint()) {
 //            qDebug() << "in paint";
             setIsSelected(false);
             isDragPointMode = false;
+            isDragShapeMode = false;
+            isDragCenterMode = false;
             m_points.clear();
             mStartPoint = mEndPoint = event->pos();
             board.setIsInPaint(true);

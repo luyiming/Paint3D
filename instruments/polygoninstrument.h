@@ -28,6 +28,10 @@ public:
         m_select_mode = isSelected;
         if (current_shape == SHAPE_POLYGON) {
             m_board->canClip(isSelected);
+            if (isSelected == false || (m_select_mode != isSelected && isSelected == true)) {
+                m_board->resetRotateAngle();
+                m_board->resetScaleFactor();
+            }
         }
     }
     bool isSelected() { return m_select_mode; }
@@ -64,6 +68,8 @@ private:
 
     bool isDragPointMode = false;
     bool isDragCenterMode = false;
+    bool isDragShapeMode = false;
+    QPoint drag_lasts_pos;
     int dragPointIndex = 0;
 
     DrawingBoard *m_board = NULL;
