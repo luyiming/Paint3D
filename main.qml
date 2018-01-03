@@ -38,7 +38,7 @@ Window {
                 drawingboard.thickness = shapePanel.thickness
                 drawingboard.opaqueness = shapePanel.opaqueness
             }
-            else if (currentHeader === 4) {
+            else if (currentHeader === 3) {
                 drawingboard.instrument = vectorPanel.instrument
             }
             else {
@@ -92,7 +92,7 @@ Window {
     }
 
     VectorPanel {
-        visible: header.currentHeader === 4
+        visible: header.currentHeader === 3
         id: vectorPanel
         width: 264
         height: root.height - header.height

@@ -35,10 +35,10 @@ Rectangle {
         anchors.centerIn: header
         anchors.horizontalCenterOffset: -128
 
-        property variant headerName: ["brush", "2dshape", "3dshape", "vector"]
+        property variant headerName: ["brush", "2dshape", "vector"]
 
         Repeater {
-            model: 4
+            model: 3
 
             CheckableButton {
                 width: 68
@@ -58,7 +58,6 @@ Rectangle {
                 off_pressed_img: 'qrc:/icon/header/' + centerHeader.headerName[index] + '-off.png'
             }
         }
-
     }
 
     Row {

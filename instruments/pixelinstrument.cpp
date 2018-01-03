@@ -41,7 +41,7 @@ void PixelInstrument::draw(DrawingBoard &board)
     QPainter painter(board.getImage());
     painter.setPen(QPen(board.brushColor(), board.thickness(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setOpacity(board.opaqueness() / 100.0);
-
+    painter.setRenderHint(QPainter::Antialiasing);
     if(mStartPoint != mEndPoint)
     {
         painter.drawLine(mStartPoint, mEndPoint);

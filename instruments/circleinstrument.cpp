@@ -70,6 +70,7 @@ void CircleInstrument::draw(DrawingBoard &board)
     painter.setBrush(brush);
 
     painter.setOpacity(board.opaqueness() / 100.0);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     if(mStartPoint != mEndPoint)
     {
