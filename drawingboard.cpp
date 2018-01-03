@@ -214,3 +214,26 @@ void DrawingBoard::saveFile(QString filePath) {
     bool succ = blend_image.save(QUrl(filePath).toLocalFile() + QDir::separator() + "test.png");
     qDebug() << succ;
 }
+
+void DrawingBoard::setFillColor(bool fillColor, QColor color) {
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->setFillColor(fillColor, color);
+    }
+}
+
+void DrawingBoard::finishPaint() {
+    if (m_instrument != VECTOR_POLYGON) {
+        qDebug() << "not in polygon mode, error";
+        return;
+    }
+    if (m_instrument != INSTRUMENT_NONE && m_instrumentHandlers[m_instrument] != NULL) {
+        PolygonInstrument* intr = (PolygonInstrument*)m_instrumentHandlers[m_instrument];
+        intr->finishPaint(*this);
+    }
+}
+

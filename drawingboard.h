@@ -146,6 +146,9 @@ public:
     Q_INVOKABLE void openFile(QString filePath);
     Q_INVOKABLE void saveFile(QString filePath);
 
+    Q_INVOKABLE void setFillColor(bool fillColor, QColor color);
+    Q_INVOKABLE void finishPaint();
+
 signals:
     void resetScaleAndRotateChanged();
     bool canClip(bool can);

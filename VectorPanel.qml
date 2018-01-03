@@ -114,12 +114,12 @@ Rectangle {
                 id: lines_and_curves
                 width: 220
 
-                property variant shapeIconName: ["curve3", "curve4"]
-                property variant shapeTitleName: [qsTr("三点曲线"), qsTr("四点曲线")]
-                property variant shapeType: [DrawingBoard.VECTOR_POLYGON, DrawingBoard.VECTOR_POLYGON]
+                property variant shapeIconName: ["curve2", "curve3", "curve4"]
+                property variant shapeTitleName: [qsTr("三点曲线"), qsTr("四点曲线"), qsTr("五点曲线")]
+                property variant shapeType: [DrawingBoard.VECTOR_POLYGON, DrawingBoard.VECTOR_POLYGON, DrawingBoard.VECTOR_POLYGON]
 
                 Repeater {
-                    model: 2
+                    model: 3
 
                     CheckableButton {
                         width: 40
@@ -138,6 +138,7 @@ Rectangle {
 
                         onCheckedChanged: {
                             if (checked && bigTitle.text !== lines_and_curves.shapeTitleName[index]) {
+                                drawingboard.finishPaint();
                                 bigTitle.text = lines_and_curves.shapeTitleName[index]
                                 titleAnimation.start()
                                 panel.instrument = lines_and_curves.shapeType[index]
@@ -146,6 +147,9 @@ Rectangle {
                                 } else if (index === 1) {
 //                                    console.log("curve4")
                                     drawingboard.setCurveMode(4);
+                                } else if (index === 2) {
+//                                    console.log("curve5")
+                                    drawingboard.setCurveMode(5);
                                 }
                             }
                         }
@@ -189,6 +193,7 @@ Rectangle {
 
                     onCheckedChanged: {
                         if (checked && bigTitle.text !== qsTr("多边形")) {
+                            drawingboard.finishPaint();
                             bigTitle.text = qsTr("多边形")
                             titleAnimation.start()
                             panel.instrument = DrawingBoard.VECTOR_POLYGON
@@ -279,9 +284,9 @@ Rectangle {
             width: 220
             title: qsTr("缩放比例")
             postfixText: qsTr("")
-            minimumValue: 0
-            maximumValue: 10
-            stepSize: 0.125
+            minimumValue: 0.1
+            maximumValue: 5
+            stepSize: 0.1
             value: 1
             onValueChanged: {
                 drawingboard.scaleShape(value)
@@ -337,6 +342,79 @@ Rectangle {
                 focus: true
                 clip: true
                 onCurrentIndexChanged: console.log(currentIndex)
+            }
+        }
+    }
+
+    ColumnLayout {
+        anchors.bottom: panel.bottom
+        anchors.bottomMargin: 30
+        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 12
+        Image {
+            source: 'qrc:/icon/line.png'
+        }
+
+        Text {
+            width: 220
+            Layout.topMargin: 3
+            color: "#4d4d75"
+            font.pixelSize: 13
+            font.family: "Microsoft Yahei UI"
+            text: qsTr("填充颜色")
+        }
+
+        ColorDialog {
+            id: fillColorDialog
+            onAccepted: {
+                fillColorID.color = fillColorDialog.color
+            }
+        }
+
+        RowLayout{
+            Rectangle {
+                width: 50
+                height: 50
+                color: "#f0f2f3"
+                border.width: 1
+                border.color: "#d2d2d2"
+                Rectangle {
+                    id: fillColorID
+                    width: 30
+                    height: 30
+                    color: "#ff7f27"
+                    anchors.centerIn: parent
+                    onColorChanged: {
+                        drawingboard.setFillColor(fillStyle.currentIndex === 0, fillColorID.color)
+                    }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(containsMouse) {
+                            parent.border.color = "#305ccc"
+                        }
+                        else {
+                            parent.border.color = "#d2d2d2"
+                        }
+                    }
+                    onClicked: {
+                        fillColorDialog.open()
+                    }
+                }
+            }
+            DropDownBox {
+                id: fillStyle
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                model: [ "填充", "不填充" ]
+                currentIndex: 1
+                font.pointSize: 10
+                font.family: "Microsoft Yahei UI"
+                onCurrentIndexChanged: {
+                    drawingboard.setFillColor(fillStyle.currentIndex === 0, fillColorID.color)
+                }
             }
         }
 

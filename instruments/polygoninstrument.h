@@ -28,10 +28,10 @@ public:
         m_select_mode = isSelected;
         if (current_shape == SHAPE_POLYGON) {
             m_board->canClip(isSelected);
-            if (isSelected == false || (m_select_mode != isSelected && isSelected == true)) {
-                m_board->resetRotateAngle();
-                m_board->resetScaleFactor();
-            }
+        }
+        if (isSelected == false || (m_select_mode != isSelected && isSelected == true)) {
+            m_board->resetRotateAngle();
+            m_board->resetScaleFactor();
         }
         m_board->showRotateAndScale(isSelected);
     }
@@ -49,6 +49,16 @@ public:
     void setCurveMode(int curve_points);
     void setPolygonMode() { qDebug() <<"polygon"; current_shape = SHAPE_POLYGON; }
 
+    void fillBgColor(QList<QPoint> &points, QImage *image, QColor color);
+
+    void setFillColor(bool fillColor, QColor color) {
+        hasFillColor = fillColor;
+        bgColor = color;
+        this->draw(*m_board);
+    }
+
+    void finishPaint(DrawingBoard &board);
+
 private:
     QPoint m_clipStart, m_clipEnd;
     int m_selectRange = 10; // 5px
@@ -59,9 +69,15 @@ private:
     QRect m_clipBox;
 
     QList<QList<QPoint>> m_polygons;
+    struct ColorNode {
+        QColor color; bool hasFillColor;
+        ColorNode(QColor color, bool b) : color(color), hasFillColor(b) {}
+    };
+    QList<ColorNode> m_polygons_color;
+
     QList<QList<QPoint>> m_curves;
 
-    enum { SHAPE_POLYGON, SHAPE_CURVE3, SHAPE_CURVE4, SHAPE_NONE } current_shape = SHAPE_NONE;
+    enum { SHAPE_POLYGON, SHAPE_CURVE3, SHAPE_CURVE4, SHAPE_CURVE5, SHAPE_NONE } current_shape = SHAPE_NONE;
     QList<QPoint> m_points;
     QList<QPoint> m_translate_points;
 
@@ -72,6 +88,9 @@ private:
     bool isDragShapeMode = false;
     QPoint drag_lasts_pos;
     int dragPointIndex = 0;
+
+    bool hasFillColor = false;
+    QColor bgColor;
 
     DrawingBoard *m_board = NULL;
 };

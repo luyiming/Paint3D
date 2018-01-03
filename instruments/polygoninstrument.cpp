@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QLine>
 #include <QDebug>
+#include <QtAlgorithms>
 
 QPoint getCenterPoint(QList<QPoint> &points);
 QPoint do_rotate(QPoint p, float angle, QPoint center);
@@ -28,7 +29,7 @@ void PolygonInstrument::mousePressEvent(QMouseEvent *event, DrawingBoard &board)
     else if (event->button() == Qt::LeftButton && isSelected()) {
         float rx = m_center_point.x() - event->pos().x();
         float ry = m_center_point.y() - event->pos().y();
-        if (sqrt(rx*rx + ry*ry) < 3) {
+        if (sqrt(rx*rx + ry*ry) < 4) {
             isDragCenterMode = true;
         }
 
@@ -127,7 +128,9 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
             if (current_shape == SHAPE_POLYGON) {
                 board.addPolygon(m_points);
                 m_polygons.append(m_points);
-            } else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4) {
+                m_polygons_color.append(ColorNode(this->bgColor, this->hasFillColor));
+                hasFillColor = false;
+            } else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4 || current_shape == SHAPE_CURVE5) {
                 board.addCurve(m_points);
                 m_curves.append(m_points);
             }
@@ -170,6 +173,16 @@ void PolygonInstrument::mouseReleaseEvent(QMouseEvent *event, DrawingBoard &boar
                 m_center_point = getCenterPoint(m_points);
                 draw(board);
             }
+            else if (current_shape == SHAPE_CURVE5) {
+                mStartPoint = mEndPoint = event->pos();
+                if (m_points.size() == 4) {
+                    setIsSelected(true);
+                    board.setIsInPaint(false);
+                }
+                m_points.append(mEndPoint);
+                m_center_point = getCenterPoint(m_points);
+                draw(board);
+            }
             else {
                 mStartPoint = mEndPoint = event->pos();
 
@@ -205,6 +218,9 @@ void PolygonInstrument::draw(DrawingBoard &board)
 
     // draw existing shapes
     for (int i = 0; i < m_polygons.size(); i++) {
+        if (m_polygons_color.at(i).hasFillColor) {
+            fillBgColor(m_polygons[i], vector_image, m_polygons_color.at(i).color);
+        }
         for (int j = 1; j < m_polygons[i].size(); j++) {
             mypainter.drawLine(m_polygons[i][j - 1], m_polygons[i][j]);
         }
@@ -218,6 +234,13 @@ void PolygonInstrument::draw(DrawingBoard &board)
 
     // draw current drawing shape
     if (current_shape == SHAPE_POLYGON) {
+        if (isSelected() && hasFillColor) {
+            QList<QPoint> points_list;
+            for(int i = 0; i < m_points.size(); i++) {
+                points_list.append(do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point));
+            }
+            fillBgColor(points_list, vector_image, this->bgColor);
+        }
         for(int i = 1; i < m_points.size(); i++) {
             QPoint p1 = do_rotate(do_scale(m_points[i - 1], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
             QPoint p2 = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
@@ -236,7 +259,7 @@ void PolygonInstrument::draw(DrawingBoard &board)
         }
 
     }
-    else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4) {
+    else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4 || current_shape == SHAPE_CURVE5) {
         QList<QPoint> points = m_points;
         if (board.isInPaint()) {
             points.append(mEndPoint);
@@ -265,7 +288,7 @@ void PolygonInstrument::draw(DrawingBoard &board)
 
         // draw center point
         painter.setBrush(QBrush(Qt::green));
-        painter.drawEllipse(m_center_point, 3, 3);
+        painter.drawEllipse(m_center_point, 4, 4);
         painter.setBrush(QBrush());
 
         if (m_points.size() < 1) {
@@ -503,6 +526,8 @@ void PolygonInstrument::setCurveMode(int curve_points) {
 //        qDebug() << "1111 " << curve_points;
     } else if (curve_points == 4) {
         current_shape = SHAPE_CURVE4;
+    } else if (curve_points == 5) {
+        current_shape = SHAPE_CURVE5;
     } else {
         qDebug() << "curve mode unknown";
     }
@@ -525,10 +550,142 @@ QList<QPoint> bezierCurve(QList<QPoint> points) {
          return points;
     }
     else {
-        for (float i = 0 ; i < 1 ; i += 0.01 ){
+        for (float i = 0 ; i < 1 ; i += 0.01){
             result.append(getBezierPoint(points, i));
         }
     }
 
     return result;
+}
+
+struct LineNode {
+    QPoint low, high;
+    double k_inv;
+};
+
+struct FillNode {
+    QPoint p;
+    int line_id;
+    FillNode(QPoint p, int id) : p(p), line_id(id){}
+};
+
+bool LineNodeLessThan(const LineNode &lhs, const LineNode &rhs)
+{
+    if (lhs.low.y() == rhs.low.y()) {
+        int y = lhs.low.y() + 1;
+        double x1 = (y - lhs.low.y()) * lhs.k_inv + lhs.low.x();
+        double x2 = (y - rhs.low.y()) * rhs.k_inv + rhs.low.x();
+        return x1 < x2;
+    }
+    else return lhs.low.y() < rhs.low.y();
+}
+
+bool FillNodeLessThan(const FillNode &lhs, const FillNode &rhs)
+{
+    return lhs.p.x() < rhs.p.x();
+}
+
+void swap(QPoint &lhs, QPoint &rhs) {
+    int t = lhs.x();
+    lhs.setX(rhs.x());
+    rhs.setX(t);
+    t = lhs.y();
+    lhs.setY(rhs.y());
+    rhs.setY(t);
+}
+
+void PolygonInstrument::fillBgColor(QList<QPoint> &points, QImage *image, QColor color) {
+//    if (!isSelected()) {
+//        qDebug() << "fill not in selected mode";
+//        return;
+//    }
+//    if (current_shape != SHAPE_POLYGON) {
+//        qDebug() << "not in polygon mode";
+//        return;
+//    }
+
+    QList<LineNode> linenodes;
+    for (int i = 0; i < points.size() - 1; i++) {
+        LineNode node;
+        node.low = points.at(i);
+        node.high = points.at(i + 1);
+        if (node.low.y() == node.high.y()) {
+            continue;
+        }
+        if (node.low.y() > node.high.y()) {
+            swap(node.low, node.high);
+        }
+        node.k_inv = (double)(node.high.x() - node.low.x()) / (node.high.y() - node.low.y());
+        linenodes.append(node);
+    }
+    qSort(linenodes.begin(), linenodes.end(), LineNodeLessThan);
+
+    for (int y = linenodes.first().low.y(); y <= linenodes.last().high.y(); y++) {
+        QList<FillNode> fillnodes;
+        for (int i = 0; i < linenodes.size(); i++) {
+            if (linenodes.at(i).low.y() > y) {
+                break;
+            }
+            if (linenodes.at(i).high.y() < y) {
+                continue;
+            }
+
+            int x_cross = (int)round((y - linenodes.at(i).low.y()) * linenodes.at(i).k_inv + linenodes.at(i).low.x());
+            fillnodes.append(FillNode(QPoint(x_cross, y), i));
+        }
+        qSort(fillnodes.begin(), fillnodes.end(), FillNodeLessThan);
+        for (int i = 0; i < fillnodes.size() - 1; ) {
+            if (i + 1 < fillnodes.size() && fillnodes.at(i).p == fillnodes.at(i + 1).p) {
+                LineNode line1 = linenodes.at(fillnodes.at(i).line_id);
+                LineNode line2 = linenodes.at(fillnodes.at(i + 1).line_id);
+                if (line1.low == line2.low) {
+                    // 同侧在上
+                    i++;
+                }
+                else if (line1.high == line2.high) {
+                    // 同侧在下
+                    i++;
+                }
+                else if (line1.high == line2.low || line1.low == line2.high) {
+                    // 异侧
+                    fillnodes.removeAt(i);
+                }
+            }
+            i++;
+        }
+
+        if (fillnodes.size() % 2 != 0) {
+            qDebug() << "not even nodes, error";
+            continue;
+        }
+        for (int i = 0; i < fillnodes.size() - 1; i += 2) {
+            int y = fillnodes.at(i).p.y();
+            for (int x = fillnodes.at(i).p.x(); x < fillnodes.at(i + 1).p.x(); x ++) {
+                if(x >= 0 && x < image->width() && y >= 0 && y < image->height())
+                    image->setPixel(x, y, color.rgb());
+            }
+        }
+    }
+}
+
+void PolygonInstrument::finishPaint(DrawingBoard &board) {
+    if (isSelected()) {
+        for(int i = 0; i < m_points.size(); i++) {
+            m_points[i] = do_rotate(do_scale(m_points[i], board.getScaleFactor(), m_center_point), board.getRotateAngle(), m_center_point);
+        }
+        board.setIsInPaint(false);
+        setIsSelected(false);
+        if (current_shape == SHAPE_POLYGON) {
+            board.addPolygon(m_points);
+            m_polygons.append(m_points);
+            m_polygons_color.append(ColorNode(this->bgColor, this->hasFillColor));
+            hasFillColor = false;
+        } else if (current_shape == SHAPE_CURVE3 || current_shape == SHAPE_CURVE4 || current_shape == SHAPE_CURVE5) {
+            board.addCurve(m_points);
+            m_curves.append(m_points);
+        }
+
+        m_points.clear();
+        draw(board);
+    }
 }
